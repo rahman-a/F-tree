@@ -1,4 +1,4 @@
-import {useEffect, useRef, useMemo} from 'react'
+import {useEffect, useRef} from 'react'
 import * as d3 from 'd3'
 import { useHistory} from 'react-router'
 
@@ -115,6 +115,7 @@ const Tree = ({familyData,isProfile}) => {
                     return d.x > Math.PI/2 && !d.children ? 80 :  -80
                 }
             } )
+            // eslint-disable-next-line
             .attr("text-anchor", d => d.x > Math.PI/2 === !d.children ? "start" : "end")
             .attr("transform", d => d.depth > 0 && "rotate(" + (d.x > Math.PI/2 ? d.x-Math.PI/2 - Math.PI / 2 : d.x-Math.PI/2 + Math.PI / 2) * 180 / Math.PI + ")")
             .style("font-size", d => 3 - (d.depth * 2) /10 + 'em')
