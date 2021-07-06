@@ -929,7 +929,7 @@ button:disabled {
 
 .tree__wrapper {
   font-weight: bold;
-  background-image: url("../../img/white_texture_2.jpg");
+  background-image: url("/image/white_texture_2.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
