@@ -1,0 +1,36 @@
+.resetPass {
+    display: grid;
+    height: 100vh;
+    &__wrapper {
+        @include formStyle;
+        width:unset;
+        form {
+            width:45%;
+        }
+        label {
+            font-size: 2rem;
+        }
+        @include respond(tablet){
+            width:unset;
+            height: unset;
+            form {
+                width:90%;
+            }
+        }
+    }
+    
+    &__header {
+        display: grid;
+        place-items: center;
+        h1 {
+            font-size: 8rem;
+            letter-spacing: 5px;
+            @include respond(tablet){
+                font-size: 5rem;
+            }
+        }
+        p {
+            font-size: 3rem;
+        }
+    }
+}

@@ -1,0 +1,76 @@
+@mixin formStyle {
+        width:50%;
+        display: grid;
+        place-items: center;
+        position: relative;
+        @include respond(tablet) {
+            width:75%;
+        }
+        @include respond(land-phone) {
+            width:100vw;
+            height: 100vh;
+        }
+        &_back {
+            display: none;
+            width: 10rem !important;
+            position: absolute;
+            top:1.5rem;
+            left:3rem;
+            @include respond(land-phone) {
+                display: block;
+            }
+            i {
+                font-size: 2rem;
+            }
+        }
+        form {
+            width: 60%;
+            @include respond(land-tablet) {
+                width:90%;
+                padding-left: 2rem;
+            }
+        }
+        .form-group {
+            margin: 2rem 0;
+            @include respond(land-phone) {
+                margin:1rem 0;
+            }
+        }
+        label {
+            font-size: 2.5rem;
+            @include respond(land-phone) {
+              font-size: 2rem;
+            }
+        }
+        input {
+            padding: 1rem  2rem;
+            font-size: 1.6rem;
+            @include respond(land-phone) {
+                padding:0.8rem;
+                font-size: 1.4rem;
+            }
+        }
+        button {
+            width:50%;
+            padding:1rem 2rem;
+            font-size: 1.6rem;
+        }
+        small {
+            display: block;
+            position: relative;
+            margin-top: 2rem;
+            z-index: 999;
+        button {
+            all: unset;
+            padding: 0 0.3rem;
+            color:var(--secondary-color);
+            cursor: pointer;
+            @include respond(land-phone) {
+               text-decoration: underline;
+            }
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        }
+}

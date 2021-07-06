@@ -1,0 +1,52 @@
+main {
+    min-height: 80vh;
+}
+.main__title {
+    text-align: center;
+    font-size: 5rem;
+    margin-top: 2rem;
+}
+.footer {
+    &__show {
+        @include respond(tablet) {
+            display: none;
+        }
+    }
+    &__hide {
+        display: none;
+        @include respond(tablet) {
+            display: block;
+        }
+    }
+}
+
+.pagination {
+    justify-content: center;
+    align-items: center;
+    li {
+        margin-left: 2rem;
+    }
+}
+button:disabled {
+    background-color: rgb(202, 199, 199) !important;
+    pointer-events: none !important;
+}
+// .tree {
+//     &__wrapper {
+//         background-image: url('../img/white_texture_2.jpg');
+//         background-position: center;
+//         background-size: cover;
+//         background-repeat: no-repeat;
+//         overflow-x: scroll;
+//         overflow-y: hidden;
+//         text-align: center;
+//         min-height: 100vh;
+//         text {
+//             text-shadow: 
+//                 1px 1px 3px #9e9e9e,
+//                 1px 1px 3px #9e9e9e,
+//                 1px 1px 3px #9e9e9e,
+//                 1px 1px 3px #9e9e9e;
+//         }
+//     }
+// }

@@ -1,0 +1,77 @@
+.auth {
+    display: flex;
+    justify-content: space-between;
+    @include respond(land-phone) {
+        flex-direction: column;
+    }
+    &__tree {
+        width:85rem;
+        height: 100vh;
+        position: relative;
+        margin:0;
+        @include respond(land-tablet) {
+            width:75rem;
+        }
+        @include respond(tablet) {
+            width:65rem;
+        }
+        @include respond(land-phone) {
+            width:100vw;
+            height: 100vh;
+        }
+        &_overlay {
+            display: grid;
+            place-items: center;
+            position: absolute;
+            width:90%;
+            height: 100%;
+            background-image: linear-gradient(to bottom right, var(--main-color),var(--secondary-color));
+            opacity:0.9;
+            h1 {
+                font-size: 12rem;
+                text-align: center;
+                color:rgba(255,255,255,0.8);
+                @include respond(land-phone) {
+                    font-size: 8rem;
+                }
+            }
+            @include respond(land-phone) {
+                width: 100%;
+            }
+        }
+        img {
+            width:90%;
+            height: 100vh;
+            @include respond(land-phone) {
+                width:100%;
+            }
+        }
+    }
+    &__cta {
+        display: none;
+        width: 100%;
+        justify-content: space-evenly;
+        align-items: center;
+        position: absolute;
+        bottom: 15%;
+        @include respond(land-phone) {
+            display: flex;
+        }
+        button {
+            all:unset;
+            background-color: var(--main-color);
+            border:1px solid var(--secondary-color) ;
+            padding:1rem 3rem;
+            font-size: 1.6rem;
+            color:rgba(255,255,255,0.8);
+            border-radius: 1rem;
+        }
+    }
+    &__credential {
+        @include formStyle;
+        min-height: 70rem;
+        @include respond(land-phone) {
+          display: none;
+        }
+    }
+}

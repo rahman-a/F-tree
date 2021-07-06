@@ -1,0 +1,49 @@
+.home {
+    &__header {
+        margin:2rem;
+        button {
+            margin-left: 2rem;
+            font-size: 1.6rem;
+            i {
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
+            }
+            
+        }
+        @include respond(tablet) {
+            button {
+                margin-top: 1.5rem;
+            }
+        }
+    }
+    &__upload {
+        border: 1px dashed;
+        padding: 0.5rem 2rem;
+        cursor: pointer;
+        margin: 0;
+    }
+    &__fallback {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px dashed #8492a6;
+        padding: 2rem;
+        font-size: 2rem;
+        width: fit-content;
+        letter-spacing: 2px;
+        border-radius: 0.5rem;
+        @include respond(tablet){
+            text-align: center;
+            width:90%;
+        }
+    }
+    &__cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        button {
+            margin-right: 1rem;
+        }
+    }
+}

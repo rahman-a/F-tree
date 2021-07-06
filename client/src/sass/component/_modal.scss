@@ -1,0 +1,32 @@
+.modal {
+    &-content {
+        color:var(--main-color)
+    }
+    &-body {
+        form {
+            width:35rem;
+            font-size: 2.5rem;
+            input {
+                padding:0.5rem;
+                font-size: 1.5rem;
+            }
+            label {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            button {
+                width: 10rem;
+                margin-top: 1.5rem;
+                font-size: 1.7rem;
+            }
+        }
+    }
+
+    &-footer {
+        button {
+            width:10rem;
+            font-size: 1.7rem;
+        }
+    }
+
+}

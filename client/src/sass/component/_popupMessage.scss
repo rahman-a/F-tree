@@ -1,0 +1,25 @@
+.popup {
+    display: grid;
+    place-items: center;
+    min-width:45rem;
+    @include respond(tablet){
+        min-width:35rem;
+    }
+    position: absolute;
+    top:0;
+    left:50%;
+    transform: translateX(-50%);
+    transition: all 0.5s ease;
+    padding:1rem 2.5rem;
+    border-radius: 1rem;
+    opacity:0;
+    text-align: center;
+    z-index:99999999;
+    &__close {
+        position: absolute;
+        top: 0;
+        right: 1rem;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+}

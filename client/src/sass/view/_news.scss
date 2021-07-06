@@ -1,0 +1,160 @@
+.news {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    &__header {
+        display: flex;
+        margin:2rem 0;
+        align-items:center;
+        @include respond(land-tablet) {
+            justify-content: space-evenly;
+        }
+        @include respond(phone){
+           flex-direction: column;
+        }
+    }
+    &__card {
+        width:30rem;
+        margin: 3rem 5rem;
+    }
+    &__figure {
+        width:100%;
+        img {
+            width:100%
+        }
+    }
+    &__info {
+        a {
+            font-size: 1.4rem;
+        }
+    }
+    &__par {
+        height: 8rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        margin-bottom: 1.5rem;
+    }
+    &__new {
+        margin-right: 8rem;
+        font-size: 1.8rem;
+        @include respond(phone){
+            margin-right: 0;
+            margin-bottom: 1rem;
+        }
+    }
+    &__add {
+        display: flex;
+        justify-content: center;
+        margin:5rem 0;
+        form {
+            width:50%;
+            @include respond(land-phone) {
+                width:85%;
+            }
+            .form-group {
+                margin-bottom: 3rem;
+                label {
+                    font-size: 2rem;
+                }
+                input {
+                    padding:1rem 2rem;
+                    font-size: 1.6rem;
+                }
+                textarea {
+                    font-size: 1.6rem;
+                }
+            }
+            button {
+                width: 50%;
+                font-size: 1.8rem;
+            }
+        }
+    }
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+    }
+    &__article {
+       width: 50%;
+       @include respond(tablet) {
+           width:70%;
+       }
+       @include respond(land-phone) {
+        width:95%;
+    }
+    }
+    &__image {
+        width:100%;
+        img {
+            width:100%;
+        }
+    }
+    &__title {
+        text-align: center;
+        font-family: var(--bold-font);
+        margin:2rem 0;
+        font-size: 5rem;
+        @include respond(tablet) {
+            font-size: 4rem;
+        }
+    }
+    &__headline {
+        font-family: var(--bold-font);
+        margin:2rem 0;
+        font-size: 2.5rem;
+    }
+    &__body {
+        font-size: 1.8rem;
+        font-family: var(--book-font);
+        letter-spacing: 1px;
+        border:1px solid var(--main-color);
+        padding: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0 12px 18px -6px rgba(0,0,0,0.5);
+    }
+}
+
+.editor {
+    min-height: 25rem;
+    .ck-content{
+        padding:0 1.5rem !important;
+        min-height: 25rem;
+    }
+}
+
+.ReactTags {
+    &__tag {
+        display: inline-block;
+        width: max-content;
+        border: 1px solid #fff;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+    }
+    &__remove {
+        all:unset;
+        background-color: azure;
+        width: 3rem !important;
+        margin-right: 1rem;
+        color: #460202;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.6rem;
+    }
+    &__tagInputField {
+        width:100%;
+    }
+    &__suggestions {
+        background-color: #fff;
+        border:1px solid var(--main-color);
+        width:100%;
+        font-size: 1.4rem;
+        padding:0 1rem;
+        color:var(--main-color);
+        cursor: pointer;
+    }
+}

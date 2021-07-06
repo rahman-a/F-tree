@@ -1,0 +1,25 @@
+ // phone  575.98px
+// phone land  767.98px
+// tablet  991.98px
+// tablet land  1199.98px
+// big screen 1800px
+
+// 1em = 16px
+
+@mixin respond ($br) {
+    @if $br == phone {
+        @media (max-width: 35.99em){ @content };  //575.98px
+    }
+    @if $br == land-phone {
+        @media (max-width: 47.99em){ @content }; // 767.98px
+    }
+    @if $br == tablet {
+        @media (max-width: 61.99em){ @content }; //  991.98px
+    }
+    @if $br == land-tablet {
+        @media (max-width: 74.99em){ @content }; //1199.98
+    }
+    @if $br ==  big-screen {
+        @media (min-width: 112.5em){ @content }; // 1800px
+    }
+}

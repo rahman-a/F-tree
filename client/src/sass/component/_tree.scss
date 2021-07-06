@@ -1,0 +1,15 @@
+.tree__wrapper {
+  font-weight: bold;
+  background-image: url("../../img/white_texture_2.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: scroll;
+  text-align: center;
+  min-height: 100vh;
+  text {
+    text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  }
+}
+
+

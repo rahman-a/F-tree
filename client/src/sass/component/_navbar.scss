@@ -1,0 +1,53 @@
+.navigation {
+    &__nav {
+        margin-right: auto;
+    }
+    &__brand {
+        font-size: 3rem;
+        font-family: var(--jaz-font), var(--bold-font);
+    }
+    &__dropdown {
+        font-size: 2rem;
+        position: relative;
+        .dropdown-toggle {
+            &::after {
+                margin-right: 0.5rem;
+            }
+        }
+        .dropdown-menu {
+            font-size: 1.6rem;
+            width: 18rem;
+            text-align: right;
+            position: fixed !important;
+            z-index: 9999999;
+            i {
+                margin-left: 1rem;
+            }
+            @include respond(tablet) {
+                width:100%;
+            }
+        }
+    }
+    &__search {
+        display: flex;
+        width: 30rem;
+        margin-left: 2rem;
+        align-items: center;
+        input {
+            margin-left: 1rem;
+            padding: 1rem 0.9rem;
+            width: 80%;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+        button {
+            border: 1px dashed var(--main-color);
+            padding: .8rem;
+            color: var(--main-color);
+            font-size: 1.3rem;
+            &:hover {
+                background-color: var(--main-color);
+            }
+        }
+    }
+}

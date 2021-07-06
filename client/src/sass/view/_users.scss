@@ -1,0 +1,61 @@
+.users {
+    margin: 5rem;
+    @include respond(land-phone) {
+        margin:2rem;
+    }
+    &__table {
+        overflow-x: auto;
+        table {
+            table-layout: auto;
+            color:#212529;
+            width:75%;
+            background-color: snow;
+            td {
+                padding: 0.8rem;
+            }
+            span {
+                display: block;
+                width:max-content;
+            }
+        }
+        a {
+            color:#212529;
+            text-decoration: none;
+            &:hover {
+                color:#13967d;
+                text-decoration: underline;
+            }
+        }
+    }
+    
+    &__sort {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3rem;
+        @include respond(tablet) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+       button {
+        padding: 1rem 2rem;
+        font-size: 1.6rem;
+        &::after {
+            margin-right: 0.5rem;
+        }
+       }
+       a {
+        font-size: 1.85rem;
+        padding: 0.5rem;
+        text-align: start;
+       }
+    }
+    &__search {
+        margin-right: 2rem;
+        @include respond(tablet){
+            margin:2rem 0 0 0;
+        }
+        button{
+            color:lavender !important;
+        }
+    }
+}

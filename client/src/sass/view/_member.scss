@@ -1,0 +1,143 @@
+.member {
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+    }
+    &__info {
+        width:75%;
+    }
+    &__data {
+        min-height:25rem;
+        input, select {
+            padding: 0.5rem;
+            font-size: 1.6rem;
+        }
+        label {
+            font-size: 2rem;
+        }
+        button {
+            font-size: 2rem;
+            width: 25%;
+            margin-top: 2rem;
+        }
+    }
+    &__personal {
+        position: relative;
+    }
+    &__relative {
+        &_title {
+            font-size: 2.4rem;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #64707d;
+            padding-bottom: 1rem;
+            margin-bottom:1.5rem;
+            display: inline-block;
+        }
+        &_name {
+            border: 1px solid #2c3e50;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.8rem;
+            margin-left: 1rem;
+            background-color: lavender;
+            color:#2c3e50;
+        }
+        &_add {
+            border:1px dashed #2c3e50;
+            background-color: transparent;
+            cursor: pointer;
+            &:hover {
+                border-color: lavender;
+                color:lavender;
+            }
+        }
+        form {
+            display: flex;
+            align-items: center;
+            margin-top:2rem;
+            button {
+                width:5rem;
+                margin-top: 0;
+                margin-right:1rem;
+            }
+        }
+    }
+    &__news {
+        &_block {
+            display: flex;
+            flex-direction: column;
+            align-items:flex-start;
+        }
+        &_headline {
+            position: relative;
+            font-size: 2.2rem;
+            font-family: var(--thin-font);
+            padding-bottom: 0.3rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            padding:1rem 0.5rem;
+            &:hover {
+                color:lavender;
+                text-decoration: underline;
+            }
+            &::before {
+                content: '';
+                position: absolute;
+                top: 2.9rem;
+                width: 1.5rem;
+                height: 1px;
+                background-color: lavender;
+                right: -2rem;
+
+            }
+        }
+    }
+    &__title {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--main-color);
+        font-family: var(--bold-font);
+        letter-spacing: 1px;
+        margin-top: 3rem;
+    }
+    &__photo {
+        text-align: end;
+        width: 20rem;
+        clip-path: circle();
+        opacity:1;
+        transition: all 0.5s ease-in;
+        @include respond(tablet) {
+            width:10rem;
+        }
+        img {
+            width:100%;
+        }
+        &:hover {
+            cursor: pointer;
+            opacity: 0.5;
+        }
+    }
+    &__row {
+        @include respond(tablet) {
+            flex-direction: column;
+        }
+    }
+    &__col {
+      &_data1 {
+        margin:0 5rem;
+        @include respond(tablet) {
+            margin:0;
+        }
+      }
+      &_data2 {
+        display: flex;
+        justify-content: flex-end;
+        align-items: baseline;
+        @include respond(tablet) {
+            position: absolute;
+            top: -8rem;
+            left: -4rem;
+        }
+      }
+    }
+}
