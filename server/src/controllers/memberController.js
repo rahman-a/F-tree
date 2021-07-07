@@ -143,7 +143,6 @@ export const getMemberInfoById = async (req, res, next) => {
     const {id} = req.params
     try {
         const member = await Member.findById(id)
-        console.log('Member Info: ', member);
         if(!member) {
             res.status(404)
             throw new Error('هذا العضو غير موجود من الممكن ان يكون قد تم حذفة')

@@ -34,30 +34,36 @@ const template = {
 }
 }
 
-const sendEmail = async (to, infoUrl) => {
+const sendEmail = async (to, infoUrl, next) => {
+  try {
     // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    service:"gmail",
-    auth: {
-      user: 'ahmpeace.2010@gmail.com', // generated ethereal user
-      pass: 'ahm4055select189', // generated ethereal password
-    },
-  });
+    let transporter = nodemailer.createTransport({
+      service:"gmail",
+      auth: {
+        user: 'ahmpeace.2010@gmail.com', // generated ethereal user
+        pass: 'ahm4055select189', // generated ethereal password
+      },
+    });
 
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: '" عائلة  الغنيم  👻" elghoniewm@test.com', // sender address
-    to, // list of receivers
-    subject: "إعادة ضبط كلمة المرور من موقع عائلة الغنيم", // Subject line
-    html: template.reset(infoUrl), // html body
-  });
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '" عائلة  الغنيم  👻" elghoniewm@test.com', // sender address
+      to, // list of receivers
+      subject: "إعادة ضبط كلمة المرور من موقع عائلة الغنيم", // Subject line
+      html: template.reset(infoUrl), // html body
+    });
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  } catch (error) {
+    next(error)
+  }
+  
+  
 }
 
 export default sendEmail
