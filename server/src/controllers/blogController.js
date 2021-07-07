@@ -1,10 +1,6 @@
 import Blog from '../models/blogModel.js'
 
 export const createNewBlog = async(req, res ,next) => {
-    // console.log('Article Body: ',req.body);
-    // console.log('Image: ',req.file);
-    // console.log('Type of members: ',typeof(req.body.members));
-    // console.log(req.body.members);
     try {
         const blog = new Blog({
             author:req.user._id,

@@ -36,6 +36,7 @@ export const userUploadCSV = (csv) => async(dispatch) => {
         const {data} = await memberServices.uploadCSV(csv)
         dispatch({type:MEMBER_UPLOAD_CSV_SUCCESS, payload:data.message})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_UPLOAD_CSV_FAIL,
             payload: error.response && error.response.data.error
@@ -49,6 +50,7 @@ export const userGenerateCSV = (count) => async(dispatch) => {
         const {data} = await memberServices.generateCSV(count)
         dispatch({type:MEMBER_GENERATE_CSV_SUCCESS, payload:data})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_CSV_FAIL,
             payload: error.response && error.response.data.error
@@ -62,6 +64,7 @@ export const userGenerateData = () => async(dispatch) => {
         const {data} = await memberServices.importTreeData()
         dispatch({type:MEMBER_GENERATE_DATA_SUCCESS, payload:data.familyData})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_DATA_FAIL,
             payload: error.response && error.response.data.error
@@ -75,6 +78,7 @@ export const getMemberInfo = (id) => async(dispatch) => {
         const {data:{info}} = await memberServices.info(id)
         dispatch({type:MEMBER_INFO_SUCCESS, payload:info})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_INFO_FAIL,
             payload: error.response && error.response.data.error
@@ -88,6 +92,7 @@ export const uploadMemberAvatar = (id) => async(dispatch) => {
         const {data} = await memberServices.uploadImg(id)
         dispatch({type:MEMBER_UPLOAD_AVATAR_SUCCESS, payload:data.message})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_UPLOAD_AVATAR_FAIL,
             payload: error.response && error.response.data.error
@@ -102,6 +107,7 @@ export const getMemberAvatar = (id) => async(dispatch) => {
         const {data} = await memberServices.getAvatar(id)
         dispatch({type:MEMBER_AVATAR_SUCCESS, payload:data.avatar})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_AVATAR_FAIL,
             payload: error.response && error.response.data.error
@@ -115,6 +121,7 @@ export const memberGetAll = (sort) => async (dispatch) => {
         const {data} = await memberServices.index(sort)
         dispatch({type:MEMBER_ALL_SUCCESS, payload:data})
     } catch (error) {
+        console.log(error.response);
         dispatch({
             type:MEMBER_ALL_FAIL, 
             payload:error.response && error.response.data.error
