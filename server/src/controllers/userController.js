@@ -171,7 +171,7 @@ export const resetPassLink = async(req, res, next) => {
         await user.save()
         
         // compose the url
-        const resetUrl = `${req.protocol}://${req.hostname}/reset?TOKEN=${token}`
+        const resetUrl = `${req.protocol}://${req.hostname}:3000/reset?TOKEN=${token}`
         const info = {
             link:resetUrl,
             name:user.firstName
