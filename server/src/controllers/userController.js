@@ -177,7 +177,7 @@ export const resetPassLink = async(req, res, next) => {
             name:user.firstName
         }
         // send url to the user email
-        sendEmail('test_node_90@outlook.com', info)
+        // sendEmail('test_node_90@outlook.com', info)
         res.status(200).send({message:'لقد تم إرسال الرابط بنجاح نرجو الذهاب الى البريد والضغط عليه'})
     } catch (error) {
         next(error)
