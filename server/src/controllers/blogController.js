@@ -9,7 +9,7 @@ export const createNewBlog = async(req, res ,next) => {
         blog.image = req.file.buffer
         blog.members = JSON.parse(req.body.members)
         await blog.save()
-        res.status(201).send({message:'تم إنشاء المدونة بنجاح'})
+        res.status(201).send({message:'تم إنشاء الخبر بنجاح'})
     } catch (error) {
         next(error)
     }

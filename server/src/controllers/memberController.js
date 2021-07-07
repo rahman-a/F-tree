@@ -227,7 +227,9 @@ export const getMemberAvatar = async (req, res, next) => {
 
 export const SvgToPng = async(req, res, next) => {
     try { 
-        const png = await convert(req.body.svg);
+        const png = await convert(req.body.svg,{
+            puppeteer:{args: ['--no-sandbox'] }
+        });
         res.set('Content-Type', 'image/png');
         res.send({png});
     } catch (error) {
