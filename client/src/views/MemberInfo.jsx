@@ -156,7 +156,7 @@ const MemberInfo = () => {
                                             onFocus= {({target}) => target.type = 'date'}
                                             onBlur = {({target}) => {
                                                 target.type = 'text' 
-                                                target.value = ConvertToArabicNumbers(info.birthDate)
+                                                target.value = formInfo.birthDate ? formInfo.birthDate :ConvertToArabicNumbers(info.birthDate)
                                             }}
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}
                                             />

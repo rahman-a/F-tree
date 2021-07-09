@@ -41,6 +41,7 @@ export const avatarUpload = multer({
 })
 
 export const imageUpload = multer({
+  storage,
   limits:{
     fileSize:10000000
   },

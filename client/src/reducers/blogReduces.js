@@ -7,7 +7,10 @@ import {
     POSTS_LIST_FAIL,
     GET_POST_REQUEST,
     GET_POST_SUCCESS,
-    GET_POST_FAIL
+    GET_POST_FAIL,
+    DELETE_POST_REQUEST,
+    DELETE_POST_SUCCESS,
+    DELETE_POST_FAIL
 } from '../constants/blogConstant'
 
 export const createPostReducer = (state = {}, action) => {
@@ -30,6 +33,19 @@ export const listPostsReducer = (state = {}, action) => {
         case POSTS_LIST_SUCCESS:
             return {loading:false, error:null, posts:action.payload, count:action.count, page:action.page} 
         case POSTS_LIST_FAIL:
+            return {loading:false, error:action.payload}
+        default:
+            return state
+    }
+}
+
+export const deletePostReducer = (state = {}, action) => {
+    switch(action.type) {
+        case DELETE_POST_REQUEST:
+            return {loading:true, error:null}
+        case DELETE_POST_SUCCESS:
+            return {loading:false, error:null, message:action.payload} 
+        case DELETE_POST_FAIL:
             return {loading:false, error:action.payload}
         default:
             return state

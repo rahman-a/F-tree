@@ -11,8 +11,6 @@ const router  = express.Router()
     editMemberById,
     createNewMember,
     SvgToPng,
-    SvgToPdf,
-    getPDFFile,
     exportDataAsCSV
  } from '../controllers/memberController.js'
 import {userAuth, isCoAdmin} from '../middleware/authenticate.js'
@@ -23,12 +21,10 @@ router.get('/generate-csv/:count', userAuth, isCoAdmin,generateCSVTemplate )
 router.get('/export-csv', userAuth, isCoAdmin,exportDataAsCSV )
 router.get('/import-data', userAuth,extractTreeData)
 router.get('/all', userAuth, isCoAdmin, getAllMembers)
-router.get('/getPdfFile', userAuth, isCoAdmin, getPDFFile)
 router.get('/:id', userAuth,getMemberInfoById)
 router.get('/avatar/:id', userAuth,getMemberAvatar)
 router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAvatarUpload)
 router.post('/convertSvgTOPng', userAuth, isCoAdmin, SvgToPng)
-router.post('/convertSvgToPdf', userAuth, isCoAdmin, SvgToPdf)
 router.patch('/edit', userAuth, isCoAdmin, editMemberById)
 router.post('/new', userAuth, isCoAdmin, createNewMember)
 

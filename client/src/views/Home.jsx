@@ -56,8 +56,10 @@ const Home = () => {
       }
 
     const SVGTOPNGHandler = async  _ => {
-        const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
-        dispatch(convertToPNG(svgString))
+        if(document.querySelector('svg')){
+            const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
+            dispatch(convertToPNG(svgString))
+        }
        
     }
     // const SVGTOPDFHandler = async  _ => {

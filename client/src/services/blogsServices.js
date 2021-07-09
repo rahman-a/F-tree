@@ -9,6 +9,9 @@ const blogServices = {
     },
     post(id){
         return api().get(`blogs/${id}`)
+    },
+    delete(id){
+        return api().delete(`blogs/${id}`)
     }
 }
 

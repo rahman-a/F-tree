@@ -6,8 +6,17 @@ export const createNewBlog = async(req, res ,next) => {
             author:req.user._id,
             ...req.body
         })
-        blog.image = req.file.buffer
-        blog.members = JSON.parse(req.body.members)
+        if(req.files){
+            let path = ''
+            req.files.forEach(file => {
+                path = path + file.filename + ','
+            })
+            path = path.substring(0, path.lastIndexOf(","))
+           blog.image = path
+        }
+        if(req.body.members){
+            blog.members = JSON.parse(req.body.members)
+        }
         await blog.save()
         res.status(201).send({message:'تم إنشاء الخبر بنجاح'})
     } catch (error) {
@@ -50,9 +59,18 @@ export const getPostById = async(req, res, next) => {
         next(error)
     }
 }
-/**
- * title:
- * body:
- * image:
- * members:[name:objectId]
- */
+
+export const deletePost = async(req, res, next) => {
+    const {id} = req.params
+    try {
+        const post = await Blog.findById(id)
+        if(!post) {
+            res.status(404)
+            throw new Error('هذا الخبر ليس موجود')
+        }
+        await post.remove()
+        res.status(200).send({message:'تم حذف الخبر بنجاح'})
+    } catch (error) {
+        next(error)
+    }
+}

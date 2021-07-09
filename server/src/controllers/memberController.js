@@ -272,7 +272,11 @@ export const editMemberById = async (req, res, next) => {
     }
 }
 export const SvgToPng = async(req, res, next) => {
-    try { 
+    try {
+        if(!req.body.svg){
+            res.status(400)
+            throw new Error('من فضلك ارفع البيانات حتى يتم انشاء الصورة')
+        }
         const png = await convert(req.body.svg,{
             puppeteer:{args: ['--no-sandbox'] }
         });
@@ -283,28 +287,28 @@ export const SvgToPng = async(req, res, next) => {
     }
 }
 
-export const SvgToPdf = async(req, res, next) => {
-    console.log(path.resolve(__dirname, '../uploads'))
-    try { 
-        await pdf.create(req.body.svg, {})
-        .toFile(path.resolve(__dirname, `../uploads/result.pdf`), (err) =>{
-            if(err) throw new Error(err)
-        });
-        res.status(201).send();
-    } catch (error) {
-        next(error)
-    }
-}
+// export const SvgToPdf = async(req, res, next) => {
+//     console.log(path.resolve(__dirname, '../uploads'))
+//     try { 
+//         await pdf.create(req.body.svg, {})
+//         .toFile(path.resolve(__dirname, `../uploads/result.pdf`), (err) =>{
+//             if(err) throw new Error(err)
+//         });
+//         res.status(201).send();
+//     } catch (error) {
+//         next(error)
+//     }
+// }
 
-export const getPDFFile = async(req, res, next) => {
-    try {
-        res.set('content-type', 'application/pdf')
-        res.attachment('result.pdf')
-        res.download(path.resolve(__dirname, '../uploads/result.pdf'))
-    } catch (error) {
-        next(error)
-    }
-}
+// export const getPDFFile = async(req, res, next) => {
+//     try {
+//         res.set('content-type', 'application/pdf')
+//         res.attachment('result.pdf')
+//         res.download(path.resolve(__dirname, '../uploads/result.pdf'))
+//     } catch (error) {
+//         next(error)
+//     }
+// }
 
 export const exportDataAsCSV = async(req, res, next) => {
     try {

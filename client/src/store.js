@@ -31,7 +31,8 @@ import {
 import {
     createPostReducer,
     listPostsReducer,
-    getPostReducer
+    getPostReducer,
+    deletePostReducer
 } from './reducers/blogReduces'
 const reducers = combineReducers({
     // Users Reducer
@@ -62,7 +63,8 @@ const reducers = combineReducers({
     // Blog Reducers
     newPost:createPostReducer,
     news:listPostsReducer,
-    post:getPostReducer
+    post:getPostReducer,
+    removePost:deletePostReducer
 
 })
 

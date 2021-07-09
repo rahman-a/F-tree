@@ -1,20 +1,13 @@
 import {Button} from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
 import parser from 'html-react-parser'
+import CarouselBlock from './Carousel'
 
 const NewsCard = ({info}) => {
-    const getAvatar  = (buffer) => {
-        const arrayBufferView = new Uint8Array(buffer)
-        const blob = new Blob([ arrayBufferView ], { type: 'image/png' })
-        const urlCreator = window.URL || window.webkitURL
-        const imageUrl = urlCreator.createObjectURL(blob)
-        return imageUrl
-    }
+    
     return (
         <div className='news__card'>
-            <figure className='news__figure'>
-                <img src={getAvatar(info.image.data)} alt="صورة المقال" />
-            </figure>
+            <CarouselBlock images={info.image.split(',')}/>
             <div className="news__info">
                 <h3 className="news__headline">{info.title}</h3>
                 <div className='news__par'>{parser(info.body)}</div>
