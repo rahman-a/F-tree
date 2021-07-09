@@ -2,6 +2,14 @@ import {
     MEMBER_UPLOAD_CSV_REQUEST,
     MEMBER_UPLOAD_CSV_SUCCESS,
     MEMBER_UPLOAD_CSV_FAIL,
+    MEMBER_EDIT_REQUEST,
+    MEMBER_EDIT_SUCCESS,
+    MEMBER_EDIT_FAIL,
+    MEMBER_EDIT_CLEAR,
+    MEMBER_CREATE_REQUEST,
+    MEMBER_CREATE_SUCCESS,
+    MEMBER_CREATE_FAIL,
+    MEMBER_CREATE_CLEAR,
     MEMBER_GENERATE_CSV_REQUEST,
     MEMBER_GENERATE_CSV_SUCCESS,
     MEMBER_GENERATE_CSV_FAIL,
@@ -33,6 +41,38 @@ import {
     MEMBER_GENERATE_FAMILY_CSV_FAIL,
     MEMBER_GENERATE_FAMILY_CSV_CLEAR
 } from '../constants/memberConstant'
+
+
+export const memberNewReducer = (state = {}, action) => {
+    switch(action.type){
+        case MEMBER_CREATE_REQUEST:
+            return {loading:true, error:null}
+        case MEMBER_CREATE_SUCCESS:
+            return {loading:false, error:null, message:action.payload}
+        case MEMBER_CREATE_FAIL:
+            return {loading:false, error:action.payload}
+        case MEMBER_CREATE_CLEAR:
+            return {message:null, error:null}
+        default:
+            return state
+    }
+}
+
+export const memberEditReducer = (state = {}, action) => {
+    switch(action.type){
+        case MEMBER_EDIT_REQUEST:
+            return {loading:true, error:null}
+        case MEMBER_EDIT_SUCCESS:
+            return {loading:false, error:null, message:action.payload}
+        case MEMBER_EDIT_FAIL:
+            return {loading:false, error:action.payload}
+        case MEMBER_EDIT_CLEAR:
+            return {message:null, error:null}
+        default:
+            return state
+    }
+}
+
 
 
 export const uploadCSVReducer = (state = {}, action) => {

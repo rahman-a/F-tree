@@ -18,8 +18,10 @@ import {
     generateCSVReducer,
     generateDataReducer,
     memberInfoReducer,
+    memberEditReducer,
     memberAvatarReducer,
     memberUploadAvatarReducer,
+    memberNewReducer,
     allMembersReducer,
     convertToPNGReducer,
     convertToPDFReducer,
@@ -54,6 +56,8 @@ const reducers = combineReducers({
     PNGTree: convertToPNGReducer,
     PDFTree:convertToPDFReducer,
     familyCSV:generateFamilyCSVReducer,
+    memberEdit:memberEditReducer,
+    newMember:memberNewReducer,
 
     // Blog Reducers
     newPost:createPostReducer,

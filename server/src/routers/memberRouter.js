@@ -8,6 +8,8 @@ const router  = express.Router()
     memberAvatarUpload,
     getMemberAvatar,
     getAllMembers,
+    editMemberById,
+    createNewMember,
     SvgToPng,
     SvgToPdf,
     getPDFFile,
@@ -27,6 +29,8 @@ router.get('/avatar/:id', userAuth,getMemberAvatar)
 router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAvatarUpload)
 router.post('/convertSvgTOPng', userAuth, isCoAdmin, SvgToPng)
 router.post('/convertSvgToPdf', userAuth, isCoAdmin, SvgToPdf)
+router.patch('/edit', userAuth, isCoAdmin, editMemberById)
+router.post('/new', userAuth, isCoAdmin, createNewMember)
 
 
 export default router

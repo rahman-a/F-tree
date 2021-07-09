@@ -103,21 +103,21 @@ const Tree = ({familyData,isProfile}) => {
             .attr("dy","0.2em")
             .attr('y', d => {
                 if(d.depth === 0 || d.depth === 1){
-                    return 50
+                    return 10
                 }else {
                     return 2
                 }
             })
             .attr("x", (d) => {
                 if(d.depth === 0 || d.depth === 1){
-                    return 15
+                    return -20
                 }else {
                     return d.x > Math.PI/2 && !d.children ? 80 :  -80
                 }
             } )
             // eslint-disable-next-line
             .attr("text-anchor", d => d.x > Math.PI/2 === !d.children ? "start" : "end")
-            .attr("transform", d => d.depth > 0 && "rotate(" + (d.x > Math.PI/2 ? d.x-Math.PI/2 - Math.PI / 2 : d.x-Math.PI/2 + Math.PI / 2) * 180 / Math.PI + ")")
+            .attr("transform", d => d.depth > 1 && "rotate(" + (d.x > Math.PI/2 ? d.x-Math.PI/2 - Math.PI / 2 : d.x-Math.PI/2 + Math.PI / 2) * 180 / Math.PI + ")")
             .style("font-size", d => 3 - (d.depth * 2) /10 + 'em')
             .text(d => d.data.firstName)
             .attr('id',  d => 'name_' + d.data._id)

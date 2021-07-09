@@ -44,7 +44,7 @@ const Login = () => {
         <div className='auth'>
             {!isFormOn && <figure className='auth__tree'>
                 <div className="auth__tree_overlay">
-                    <h1>أسرة الغنيم ترحب بكم</h1>
+                    <h1>أسرة سعيد بن غنيم ترحب بكم</h1>
                 </div>
                 <img src="./image/tree.jpg" alt="tree" />
                 <div className='auth__cta'>

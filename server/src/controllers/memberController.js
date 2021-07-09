@@ -13,6 +13,21 @@ import pkg from 'convert-svg-to-png'
 const {convert} = pkg
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+
+export const createNewMember = async(req, res, next) => {
+    const member = new Member({
+        _id:ObjectId().toHexString(),
+        author: req.user._id,
+        ...req.body
+    })
+    try {
+        await member.save()
+        res.send({message:'تم تسجيل العضو بنجاح'})
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const uploadCSV = async(req, res, next) => {
     try {
         if(req.file === undefined) throw new Error('من فضلك إرفع ملف الـ csv')
@@ -128,7 +143,6 @@ export const extractTreeData = async (req, res, next) => {
             return {
                 _id:d._id, 
                 firstName:d.firstName, 
-                parentName:d.parentName ? d.parentName : '', 
                 parentId:d.parentId,
                 isAlive:d.isAlive === true ? true : d.isAlive === false ? false : ''
             }
@@ -158,13 +172,28 @@ export const getMemberInfoById = async (req, res, next) => {
         }))
         memberData.childrenNames = [...memberData.childrenNames, ...childrenNames]
         memberData.spouseNames = [...memberData.spouseNames, ...spouseNames]
-        const dt = new Date(memberData.birthDate)
-        const day = dt.getDay().length > 1 ? dt.getDay() : '0'+dt.getDay()
-        const month = dt.getDate().length > 1 ? dt.getDate() : '0'+dt.getDate()
-        const date = `${dt.getFullYear()}-${month}-${day}`
-        memberData.birthDate = date
+        
+        // Find The Full Name of This member
+        const counts = await Member.countDocuments({})
+        const names = []
+        let current = member
+        for(let i = 0; i <= counts; i++){
+            if(current.parentId) {
+                current = await Member.findById(current.parentId)
+                names.push(current.firstName)
+            }
+        }
+        const fullName = names.join(' ')
+        memberData.fullName = fullName
+
+        if(memberData.birthDate) {
+            const dt = new Date(memberData.birthDate)
+            memberData.birthDate = dt.toISOString().split('T')[0]
+        }
+
         const news = await Blog.find({members:{_id:ObjectId(memberData._id)}})
         memberData.news = news
+        
         delete memberData.childrenId
         delete memberData.spouseId
         res.status(200).send({info:memberData})
@@ -225,6 +254,23 @@ export const getMemberAvatar = async (req, res, next) => {
     }
 }
 
+export const editMemberById = async (req, res, next) => {
+    const {id} = req.body
+    delete req.body.id
+    try {
+       const member = await Member.findById(id)
+       if(!member) throw new Error('هذا العضو غير موجود')
+       for(let key in req.body) {
+        if(req.body[key] || key === 'isAlive'){
+            member[key] = req.body[key] 
+        }
+    }
+    await member.save()
+     res.send({message:'تم تحديث بيانات العضو بنجاح'})
+    } catch (error) {
+        next(error)
+    }
+}
 export const SvgToPng = async(req, res, next) => {
     try { 
         const png = await convert(req.body.svg,{

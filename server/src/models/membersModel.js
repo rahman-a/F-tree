@@ -17,12 +17,6 @@ const memberSchema = new mongoose.Schema({
     image: {
         type:Buffer
     },
-    fullName:{
-        type:String
-    },
-    parentName :{
-        type:String,
-    },
     parentId: {
         type:mongoose.Schema.Types.ObjectId,
     },

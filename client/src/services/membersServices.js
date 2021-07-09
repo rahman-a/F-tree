@@ -33,6 +33,12 @@ const services = {
     },
     getCSVData(){
         return api().get('members/export-csv')
+    },
+    edit(info) {
+        return api().patch('members/edit', info)
+    },
+    create(info) {
+        return api().post('members/new', info)
     }
 }
 
