@@ -23,15 +23,14 @@ const Tree = ({familyData,isProfile}) => {
         wrapperRef.current.innerHTML = '';
         const margin = {top: 140, right: 0, bottom: 20, left: 0}
         const innerHeight = 2000 - margin.top - margin.bottom;
-        const zoomHandler = event =>{
-            return `scale(${event.transform.k})`
-        }
         const svg = d3.select(wrapperRef.current)
                     .append('svg')
                     .attr('width', 4000)
                     .attr('height', 2250)
                     .call(d3.zoom().scaleExtent([0.1, 5]).on('zoom', (event) => {
-                        svg.attr('transform', zoomHandler(event))
+                        svg.attr('transform', () =>{
+                            return `scale(${event.transform.k})`
+                        })
                     }))
         const width = +svg.attr("width")
         const height = +svg.attr("height")
@@ -111,14 +110,14 @@ const Tree = ({familyData,isProfile}) => {
             .attr("dy","0.2em")
             .attr('y', d => {
                 if(d.depth === 0 || d.depth === 1){
-                    return 10
+                    return 65
                 }else {
                     return 2
                 }
             })
             .attr("x", (d) => {
                 if(d.depth === 0 || d.depth === 1){
-                    return -20
+                    return -10
                 }else {
                     return d.x > Math.PI/2 && !d.children ? 80 :  -80
                 }

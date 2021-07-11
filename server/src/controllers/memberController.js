@@ -116,6 +116,7 @@ export const generateCSVTemplate = async(req, res, next) => {
                 _id:ObjectId().toHexString(),
                 firstName:'',
                 parentId:'',
+                mother:'',
                 maritalStatus:'',
                 gender:'',
                 job:'',
@@ -296,7 +297,11 @@ export const getMemberAvatar = async (req, res, next) => {
             res.status(404)
             throw new Error('لم يتم العثور على اى أعضاء')
         }
-        res.status(200).send({members, pageSize, page, membersCounts})   
+        const memberData = await Promise.all(members.map(async m => {
+            const fullName = await memberFullName(m._doc._id)
+            return {...m._doc, fullName}
+        }))
+        res.status(200).send({members:memberData, pageSize, page, membersCounts})   
     } catch (error) {
         next(error)
     }
@@ -362,32 +367,16 @@ export const exportDataAsCSV = async(req, res, next) => {
     try {
         const members = await Member.find({})
         const list = members.map(member => {
-            const spouseNames = []
-            const childrenNames = []
-            const dt = new Date(member.birthDate)
-            const day = dt.getDay().length > 1 ? dt.getDay() : '0'+dt.getDay()
-            const month = dt.getDate().length > 1 ? dt.getDate() : '0'+dt.getDate()
-            const date = `${dt.getFullYear()}-${month}-${day}`
-            member.childrenNames.forEach(m => {
-                childrenNames.push(m.name)
-            })
-            member.childrenId.forEach(m => {
-                childrenNames.push(m._id)
-            })
-            member.spouseNames.forEach(m => {
-                spouseNames.push(m.name)
-            })
-            member.spouseId.forEach(m => {
-                spouseNames.push(m._id)
-            })
+            let date = null
+            if(member.birthDate){
+                const dt = new Date(member.birthDate)
+                date = dt.toISOString().split('T')[0]
+            }
             return{
                 _id: member._id.toString(),
                 firstName:member.firstName,
-                parentName:member.parentName,
                 parentId:member.parentId && member.parentId.toString(),
-                fullName:member.fullName,
-                spouseNames:spouseNames.join(),
-                childrenNames:childrenNames.join(),
+                mother:member.mother ? member.mother:'',
                 maritalStatus:member.maritalStatus,
                 gender:member.gender,
                 job:member.job,
@@ -399,7 +388,6 @@ export const exportDataAsCSV = async(req, res, next) => {
                 isAlive:member.isAlive === true ? 'TRUE': member.isAlive === false ? 'FALSE' : ''
             }
         })
-        
         const csv = new objectToCSV(list)
         await csv.toDisk(path.resolve(__dirname, '../uploads/family-data.csv'))
         const filePath = path.resolve(__dirname, '../uploads/family-data.csv')

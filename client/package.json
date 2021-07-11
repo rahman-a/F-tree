@@ -29,6 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "sass":"node-sass src/App.scss src/style.css",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
