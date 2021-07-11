@@ -54,6 +54,15 @@ const NewMember = () => {
                                             onChange={(e) => onChangeHandler(e)}
                                             />
                                         </Form.Group>
+
+                                        <Form.Group controlId="formBasicName">
+                                            <Form.Label>إضافةالأم</Form.Label>
+                                            <Form.Control type="text"
+                                            required
+                                            name='mother'
+                                            onChange={(e) => onChangeHandler(e)}
+                                            />
+                                        </Form.Group>
                                         
                                         <Form.Group controlId="exampleForm.ControlSelect2">
                                             <Form.Label>النوع</Form.Label>
@@ -83,16 +92,6 @@ const NewMember = () => {
                                             defaultValue=''
                                             required
                                             name='birthDate'
-                                            onChange={(e) => onChangeHandler(e)}
-                                            />
-                                        </Form.Group>
-
-                                        <Form.Group controlId="formBasicBirth">
-                                            <Form.Label>محل الإقامة</Form.Label>
-                                            <Form.Control type="text" 
-                                            defaultValue=''
-                                            required
-                                            name='address'
                                             onChange={(e) => onChangeHandler(e)}
                                             />
                                         </Form.Group>
@@ -139,6 +138,16 @@ const NewMember = () => {
                                            />
                                         </Form.Group>
 
+                                        <Form.Group controlId="formBasicBirth">
+                                            <Form.Label>محل الإقامة</Form.Label>
+                                            <Form.Control type="text" 
+                                            defaultValue=''
+                                            required
+                                            name='address'
+                                            onChange={(e) => onChangeHandler(e)}
+                                            />
+                                        </Form.Group>
+
                                         <Form.Group controlId="exampleForm.ControlSelect2">
                                             <Form.Label>حالة الشخص</Form.Label>
                                             <Form.Control as="select" 
@@ -149,7 +158,7 @@ const NewMember = () => {
                                             <option value={false}>متوفي</option>
                                             <option value={true}>على قيد الحياة</option>
                                             </Form.Control>
-                                        </Form.Group>
+                                        </Form.Group>                      
                                     </Col>
                                 </Row>
                                 <Button variant="primary" type="submit">

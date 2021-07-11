@@ -4,6 +4,9 @@ const services = {
     uploadCSV(csv) {
         return api().post('members/upload-csv', csv)
     },
+    addRelatives(info){
+        return api().patch('members/relatives', info)
+    },
     generateCSV(count){
         return api().get(`members/generate-csv/${count}`)
     },

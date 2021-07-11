@@ -14,6 +14,19 @@ const {convert} = pkg
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 
+ const memberFullName = async id => {
+     const member = await Member.findById(id)
+     const counts = await Member.countDocuments({})
+        const names = []
+        let current = member
+        for(let i = 0; i <= counts; i++){
+            if(current.parentId) {
+                current = await Member.findById(current.parentId)
+                names.push(current.firstName)
+            }
+        }
+        return names.join(' ')
+ }
 export const createNewMember = async(req, res, next) => {
     const member = new Member({
         _id:ObjectId().toHexString(),
@@ -48,9 +61,6 @@ export const uploadCSV = async(req, res, next) => {
         
         for(let key in csvData) {
             if(!csvData[key]) delete csvData[key]
-            if(csvData[key] && csvData[key].includes(',')){
-                csvData[key] = csvData[key].split(',')
-            }
             if(key === '﻿_id'){
                 const id = csvData[key]
                 delete csvData[key]
@@ -59,26 +69,6 @@ export const uploadCSV = async(req, res, next) => {
             if(csvData[key] === 'null') csvData[key] = null
             if(csvData[key] === 'TRUE') csvData[key] = true
             if(csvData[key] === 'FALSE') csvData[key] = false
-            if(key === 'spouseNames' && Array.isArray(csvData[key])) {
-                const spouse_id = []
-                const spouse_names = []
-                csvData[key].forEach(d => {
-                    if(ObjectId.isValid(d)) spouse_id.push({_id:ObjectId(d)})
-                    if(!ObjectId.isValid(d)) spouse_names.push({name:d})
-                })
-                csvData.spouseNames = spouse_names
-                csvData.spouseId = spouse_id
-            } 
-            if(key === 'childrenNames' && Array.isArray(csvData[key])) {
-                const children_id = []
-                const children_names = []
-                csvData[key].forEach(d => {
-                    if(ObjectId.isValid(d)) children_id.push({_id:ObjectId(d)})
-                    if(!ObjectId.isValid(d)) children_names.push({name:d})
-                })
-                csvData.childrenNames = children_names
-                csvData.childrenId = children_id
-            } 
             csvData.author = req.user._id
         }
         result.push(csvData)
@@ -95,6 +85,28 @@ export const uploadCSV = async(req, res, next) => {
     }
 }
 
+export const addSpouseAndChildren = async(req, res, next) => {
+    const {_id, data} = req.body
+    try {
+        const member = await Member.findById(_id)
+        if(!member) {
+            res.status(404)
+            throw new Error('هذا العضو غير موجود')
+        }
+        if(member.gender){
+            if(member.gender === 'ذكر'){
+                member.wivesAndChildren =  member.wivesAndChildren.concat(data)
+            }else {
+                member.husbandAndChildren = data
+            }
+        }
+        await member.save()
+        res.send({message:'تمت الإضافة بنجاح'})
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const generateCSVTemplate = async(req, res, next) => {
     const {count} = req.params
     try {
@@ -103,11 +115,7 @@ export const generateCSVTemplate = async(req, res, next) => {
             const data = {
                 _id:ObjectId().toHexString(),
                 firstName:'',
-                parentName:'',
                 parentId:'',
-                fullName:'',
-                spouseNames:'',
-                childrenNames:'',
                 maritalStatus:'',
                 gender:'',
                 job:'',
@@ -162,29 +170,70 @@ export const getMemberInfoById = async (req, res, next) => {
             throw new Error('هذا العضو غير موجود من الممكن ان يكون قد تم حذفة')
         }
         const memberData = {...member._doc}
-        const childrenNames = await Promise.all(member.childrenId.map(async cd => {
-            const child = await Member.findById(cd._id)
-            return {_id:child._id, name:child.firstName, parent:child.parentName}
-        }))
-        const spouseNames = await Promise.all(member.spouseId.map(async cd => {
-            const spouse = await Member.findById(cd._id)
-            return {_id:spouse._id, name:spouse.firstName, parent:spouse.parentName}
-        }))
-        memberData.childrenNames = [...memberData.childrenNames, ...childrenNames]
-        memberData.spouseNames = [...memberData.spouseNames, ...spouseNames]
-        
-        // Find The Full Name of This member
-        const counts = await Member.countDocuments({})
-        const names = []
-        let current = member
-        for(let i = 0; i <= counts; i++){
-            if(current.parentId) {
-                current = await Member.findById(current.parentId)
-                names.push(current.firstName)
+        if(memberData.gender){
+            if(memberData.gender === 'ذكر') {
+                const wivesAndChildren = await Promise.all(memberData.wivesAndChildren.map(async w => {
+                    const children = await Promise.all(w.children.map( async c => {
+                        if(ObjectId.isValid(c)){
+                            const child = await Member.findById(c)
+                            const fullName = await memberFullName(c)
+                            return {id:child._id, name:`${child.firstName} ${fullName}`}
+                        } else {
+                            throw new Error('نرجو إدخال معرف فى حقل الأولاد وليس اسم')
+                        }
+                    }))
+                    if(ObjectId.isValid(w.name)){
+                        const wife = await Member.findById(w.name)
+                        const id = wife._id
+                        const fullName = await memberFullName(id)
+                        const name = `${wife.firstName} ${fullName}`
+                        return {id, name, children}
+                    }else {
+                        const name = w.name
+                        return {name, children}
+                    }
+                    
+                }))
+                memberData.wivesAndChildren = wivesAndChildren
+            }else {
+                const data = memberData.husbandAndChildren
+                const children = await Promise.all(data.children.map(async c => {
+                    if(ObjectId.isValid(c)){
+                        const child = await Member.findById(c)
+                        const fullName = await memberFullName(c)
+                        return {id:child._id, name:`${child.firstName} ${fullName}`}
+                    } else {
+                        return {name:c}
+                    }
+                }))
+                if(ObjectId.isValid(data.name)){
+                    const husband = await Member.findById(data.name)
+                    const husbandId = husband._id
+                    const fullName = await memberFullName(husbandId)
+                    const husbandName = `${husband.firstName} ${fullName}`                    
+                    memberData.husbandAndChildren = {id:husbandId, name:husbandName, children}
+                }else {
+                    memberData.husbandAndChildren = {name:data.name, children}
+                }
             }
         }
-        const fullName = names.join(' ')
-        memberData.fullName = fullName
+
+        // Get the Parent and the mother Name
+        if(memberData.parentId){
+            const parent = await Member.findById(memberData.parentId)
+            const fullName = await memberFullName(memberData.parentId)
+            memberData.parent = {id:memberData.parentId,name:`${parent.firstName} ${fullName}`}
+        }
+        if(memberData.mother){
+            if(ObjectId.isValid(memberData.mother)) {
+                const mother = await Member.findById(memberData.mother)
+                const fullName = await memberFullName(memberData.mother)
+                memberData.mother = {id:memberData.mother,name:`${mother.firstName} ${fullName}`}
+            }
+        }
+        
+        // Find The Full Name of This member
+        memberData.fullName = await memberFullName(id)
 
         if(memberData.birthDate) {
             const dt = new Date(memberData.birthDate)
@@ -194,8 +243,6 @@ export const getMemberInfoById = async (req, res, next) => {
         const news = await Blog.find({members:{_id:ObjectId(memberData._id)}})
         memberData.news = news
         
-        delete memberData.childrenId
-        delete memberData.spouseId
         res.status(200).send({info:memberData})
     } catch (error) {
         next(error)
@@ -205,12 +252,13 @@ export const getMemberInfoById = async (req, res, next) => {
 export const memberAvatarUpload = async(req, res, next) => {
     const {memberId} = req.body
     try {
-        const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
+        await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toFile(path.resolve(__dirname, `../uploads/avatar-${memberId}.png`))
         const member = await Member.findById(memberId)
-        member.image = buffer
+        member.image = `avatar-${memberId}.png`
         await member.save()
         res.status(200).send({message:'تم رفع الصورة بنجاح'})
     } catch (error) {
+        console.log('ERROR', error);
         next(error)
     }
 }

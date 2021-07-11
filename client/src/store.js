@@ -19,13 +19,13 @@ import {
     generateDataReducer,
     memberInfoReducer,
     memberEditReducer,
-    memberAvatarReducer,
     memberUploadAvatarReducer,
     memberNewReducer,
     allMembersReducer,
     convertToPNGReducer,
     convertToPDFReducer,
-    generateFamilyCSVReducer
+    generateFamilyCSVReducer,
+    memberRelativesReducer
 } from './reducers/memberReducer'
 
 import {
@@ -52,13 +52,13 @@ const reducers = combineReducers({
     generateCSV:generateCSVReducer,
     familyData: generateDataReducer,
     profile:memberInfoReducer,
-    avatar:memberAvatarReducer,
     photoUpload:memberUploadAvatarReducer,
     PNGTree: convertToPNGReducer,
     PDFTree:convertToPDFReducer,
     familyCSV:generateFamilyCSVReducer,
     memberEdit:memberEditReducer,
     newMember:memberNewReducer,
+    memberRelatives:memberRelativesReducer,
 
     // Blog Reducers
     newPost:createPostReducer,

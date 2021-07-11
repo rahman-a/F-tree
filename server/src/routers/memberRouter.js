@@ -4,6 +4,7 @@ const router  = express.Router()
     uploadCSV,
     generateCSVTemplate,
     extractTreeData,
+    addSpouseAndChildren,
     getMemberInfoById,
     memberAvatarUpload,
     getMemberAvatar,
@@ -26,6 +27,7 @@ router.get('/avatar/:id', userAuth,getMemberAvatar)
 router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAvatarUpload)
 router.post('/convertSvgTOPng', userAuth, isCoAdmin, SvgToPng)
 router.patch('/edit', userAuth, isCoAdmin, editMemberById)
+router.patch('/relatives', userAuth, isCoAdmin, addSpouseAndChildren)
 router.post('/new', userAuth, isCoAdmin, createNewMember)
 
 

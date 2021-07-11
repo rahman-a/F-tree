@@ -20,28 +20,23 @@ const memberSchema = new mongoose.Schema({
     parentId: {
         type:mongoose.Schema.Types.ObjectId,
     },
-    spouseNames:[
+    mother:{
+        type:String
+    },
+    wivesAndChildren: [
         {
-            name:String
+            name: {
+                type:String
+            },
+            children: []
         }
     ],
-    spouseId: [
-        {
-            _id:mongoose.Schema.Types.ObjectId
-            
-        }
-    ],
-    childrenNames:[
-        {
-            name:String
-        }
-    ],
-    childrenId: [
-        {
-            _id:mongoose.Schema.Types.ObjectId
-            
-        }
-    ],
+    husbandAndChildren : {
+            name:{
+                type:String
+            },
+            children:[]
+    },
     maritalStatus:{
         type:String
     },

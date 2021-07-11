@@ -6,6 +6,10 @@ import {
     MEMBER_EDIT_SUCCESS,
     MEMBER_EDIT_FAIL,
     MEMBER_EDIT_CLEAR,
+    MEMBER_ADD_RELATIVES_REQUEST,
+    MEMBER_ADD_RELATIVES_SUCCESS,
+    MEMBER_ADD_RELATIVES_FAIL,
+    MEMBER_ADD_RELATIVES_CLEAR,
     MEMBER_CREATE_REQUEST,
     MEMBER_CREATE_SUCCESS,
     MEMBER_CREATE_FAIL,
@@ -23,9 +27,6 @@ import {
     MEMBER_UPLOAD_AVATAR_REQUEST,
     MEMBER_UPLOAD_AVATAR_SUCCESS,
     MEMBER_UPLOAD_AVATAR_FAIL,
-    MEMBER_AVATAR_REQUEST,
-    MEMBER_AVATAR_SUCCESS,
-    MEMBER_AVATAR_FAIL,
     MEMBER_ALL_REQUEST,
     MEMBER_ALL_SUCCESS,
     MEMBER_ALL_FAIL,
@@ -52,6 +53,21 @@ export const memberNewReducer = (state = {}, action) => {
         case MEMBER_CREATE_FAIL:
             return {loading:false, error:action.payload}
         case MEMBER_CREATE_CLEAR:
+            return {message:null, error:null}
+        default:
+            return state
+    }
+}
+
+export const memberRelativesReducer = (state = {}, action) => {
+    switch(action.type){
+        case MEMBER_ADD_RELATIVES_REQUEST:
+            return {loading:true, error:null}
+        case MEMBER_ADD_RELATIVES_SUCCESS:
+            return {loading:false, error:null, message:action.payload}
+        case MEMBER_ADD_RELATIVES_FAIL:
+            return {loading:false, error:action.payload}
+        case MEMBER_ADD_RELATIVES_CLEAR:
             return {message:null, error:null}
         default:
             return state
@@ -136,19 +152,6 @@ export const memberUploadAvatarReducer = (state = {}, action) => {
         case MEMBER_UPLOAD_AVATAR_SUCCESS:
             return {loading:false, error:null, message:action.payload}
         case MEMBER_UPLOAD_AVATAR_FAIL:
-            return {loading:false, error:action.payload}
-        default:
-            return state
-    }
-}
-
-export const memberAvatarReducer = (state = {}, action) => {
-    switch(action.type){
-        case MEMBER_AVATAR_REQUEST:
-            return {loading:true, error:null}
-        case MEMBER_AVATAR_SUCCESS:
-            return {loading:false, error:null, avatar:action.payload}
-        case MEMBER_AVATAR_FAIL:
             return {loading:false, error:action.payload}
         default:
             return state

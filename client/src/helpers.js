@@ -3,3 +3,12 @@ export const ConvertToArabicNumbers = (num) => {
     // eslint-disable-next-line
    return new String(num).replace(/[0123456789]/g, (d)=>{return arabicNumbers[d]});
   }
+
+
+  export const getAvatar  = (buffer) => {
+    const arrayBufferView = new Uint8Array(buffer)
+    const blob = new Blob([ arrayBufferView ], { type: 'image/png' })
+    const urlCreator = window.URL || window.webkitURL
+    const imageUrl = urlCreator.createObjectURL(blob)
+    return imageUrl
+  }

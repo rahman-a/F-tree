@@ -18,13 +18,21 @@ const Tree = ({familyData,isProfile}) => {
             '#6F0000','#FFF0F5','#FFEBD9',
             '#BEEBE9','#B0A160','#E4F9FF',
         ]
-
+    
     const createTree = () => {
         wrapperRef.current.innerHTML = '';
         const margin = {top: 140, right: 0, bottom: 20, left: 0}
         const innerHeight = 2000 - margin.top - margin.bottom;
-        const svg = d3.select(wrapperRef.current).append('svg')
-        .attr('width', 4000).attr('height', 2250)
+        const zoomHandler = event =>{
+            return `scale(${event.transform.k})`
+        }
+        const svg = d3.select(wrapperRef.current)
+                    .append('svg')
+                    .attr('width', 4000)
+                    .attr('height', 2250)
+                    .call(d3.zoom().scaleExtent([0.1, 5]).on('zoom', (event) => {
+                        svg.attr('transform', zoomHandler(event))
+                    }))
         const width = +svg.attr("width")
         const height = +svg.attr("height")
         const g = svg.append("g")
@@ -33,9 +41,9 @@ const Tree = ({familyData,isProfile}) => {
         const dataStructure = d3.stratify().id(d => d._id).parentId(d => d.parentId)(familyData)
         const treeLayout = d3.tree().size([(1 * Math.PI), innerHeight])
         const root = treeLayout(dataStructure)
-
         
-         g.selectAll(".link")
+        
+        g.selectAll(".link")
             .data(root.links())
             .enter().append("path")
             .attr('fill', 'none')
@@ -178,8 +186,9 @@ const Tree = ({familyData,isProfile}) => {
             .duration(1500)
             .delay(d => d.depth * 600)
             .attr('opacity', 1)
+        
+       
     }
-    
     useEffect(() => {
        createTree()   
     })
