@@ -7,21 +7,17 @@ const MemberInfo = ({info, idx}) => {
     if(query.get('page')) { 
         idx += (query.get('page') - 1)* 10
     }
-    const getAvatar  = (buffer) => {
-        const arrayBufferView = new Uint8Array(buffer)
-        const blob = new Blob([ arrayBufferView ], { type: 'image/png' })
-        const urlCreator = window.URL || window.webkitURL
-        const imageUrl = urlCreator.createObjectURL(blob)
-        return imageUrl
+    if(info){
+        console.log('info inside: ',info)
     }
     return (
         <tr>
             <td>{idx}</td>
-            <td><Link to={`/info/${info._id}`}><span>{`${info.firstName} ${info.parentId ? info.parentName : ''}`}</span> </Link></td>
+            <td><Link to={`/info/${info._id}`}><span>{`${info.firstName} ${info.fullName ? info.fullName : ''}`}</span> </Link></td>
             <td>
                { info.image
                ?(<img 
-                src={getAvatar(info.image.data)} 
+                src={`/uploads/${info.image}`} 
                 alt="صورة شخصية"  
                 style={{width:'4rem', height:'4rem', borderRadius:'50%'}}/>)
                 :<span>لا يوجد صورة شخصية</span>

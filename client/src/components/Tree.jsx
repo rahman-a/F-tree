@@ -18,13 +18,20 @@ const Tree = ({familyData,isProfile}) => {
             '#6F0000','#FFF0F5','#FFEBD9',
             '#BEEBE9','#B0A160','#E4F9FF',
         ]
-
+    
     const createTree = () => {
         wrapperRef.current.innerHTML = '';
         const margin = {top: 140, right: 0, bottom: 20, left: 0}
         const innerHeight = 2000 - margin.top - margin.bottom;
-        const svg = d3.select(wrapperRef.current).append('svg')
-        .attr('width', 4000).attr('height', 2250)
+        const svg = d3.select(wrapperRef.current)
+                    .append('svg')
+                    .attr('width', 4000)
+                    .attr('height', 2250)
+                    .call(d3.zoom().scaleExtent([0.1, 5]).on('zoom', (event) => {
+                        svg.attr('transform', () =>{
+                            return `scale(${event.transform.k})`
+                        })
+                    }))
         const width = +svg.attr("width")
         const height = +svg.attr("height")
         const g = svg.append("g")
@@ -33,9 +40,9 @@ const Tree = ({familyData,isProfile}) => {
         const dataStructure = d3.stratify().id(d => d._id).parentId(d => d.parentId)(familyData)
         const treeLayout = d3.tree().size([(1 * Math.PI), innerHeight])
         const root = treeLayout(dataStructure)
-
         
-         g.selectAll(".link")
+        
+        g.selectAll(".link")
             .data(root.links())
             .enter().append("path")
             .attr('fill', 'none')
@@ -103,21 +110,21 @@ const Tree = ({familyData,isProfile}) => {
             .attr("dy","0.2em")
             .attr('y', d => {
                 if(d.depth === 0 || d.depth === 1){
-                    return 50
+                    return 65
                 }else {
                     return 2
                 }
             })
             .attr("x", (d) => {
                 if(d.depth === 0 || d.depth === 1){
-                    return 15
+                    return -10
                 }else {
                     return d.x > Math.PI/2 && !d.children ? 80 :  -80
                 }
             } )
             // eslint-disable-next-line
             .attr("text-anchor", d => d.x > Math.PI/2 === !d.children ? "start" : "end")
-            .attr("transform", d => d.depth > 0 && "rotate(" + (d.x > Math.PI/2 ? d.x-Math.PI/2 - Math.PI / 2 : d.x-Math.PI/2 + Math.PI / 2) * 180 / Math.PI + ")")
+            .attr("transform", d => d.depth > 1 && "rotate(" + (d.x > Math.PI/2 ? d.x-Math.PI/2 - Math.PI / 2 : d.x-Math.PI/2 + Math.PI / 2) * 180 / Math.PI + ")")
             .style("font-size", d => 3 - (d.depth * 2) /10 + 'em')
             .text(d => d.data.firstName)
             .attr('id',  d => 'name_' + d.data._id)
@@ -178,8 +185,9 @@ const Tree = ({familyData,isProfile}) => {
             .duration(1500)
             .delay(d => d.depth * 600)
             .attr('opacity', 1)
+        
+       
     }
-    
     useEffect(() => {
        createTree()   
     })

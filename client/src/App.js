@@ -7,6 +7,7 @@ import News from './views/News'
 import AddNews from './views/AddNews'
 import NewsInfo from './views/NewsInfo'
 import MemberInfo from './views/MemberInfo'
+import NewMember from './views/NewMember'
 import Reset from './views/Reset'
 import NotMatch from './views/NotMatch'
 import {Route, Switch, Redirect} from 'react-router-dom'
@@ -44,6 +45,9 @@ function App() {
         </Route>
         <Route path='/news/new'>
           {user && (user.data.isAdmin || user.data.isCoAdmin) ? <AddNews/> : <Redirect to='/news'/>}
+        </Route>
+        <Route path='/new'>
+          {user && (user.data.isAdmin || user.data.isCoAdmin) ? <NewMember/> : <Redirect to='/news'/>}
         </Route>
         <Route path='/news/:id'>
           {user ? <NewsInfo/> : <Redirect to='?redirect=news/:id'/>}

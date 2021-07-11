@@ -18,18 +18,21 @@ import {
     generateCSVReducer,
     generateDataReducer,
     memberInfoReducer,
-    memberAvatarReducer,
+    memberEditReducer,
     memberUploadAvatarReducer,
+    memberNewReducer,
     allMembersReducer,
     convertToPNGReducer,
     convertToPDFReducer,
-    generateFamilyCSVReducer
+    generateFamilyCSVReducer,
+    memberRelativesReducer
 } from './reducers/memberReducer'
 
 import {
     createPostReducer,
     listPostsReducer,
-    getPostReducer
+    getPostReducer,
+    deletePostReducer
 } from './reducers/blogReduces'
 const reducers = combineReducers({
     // Users Reducer
@@ -49,16 +52,19 @@ const reducers = combineReducers({
     generateCSV:generateCSVReducer,
     familyData: generateDataReducer,
     profile:memberInfoReducer,
-    avatar:memberAvatarReducer,
     photoUpload:memberUploadAvatarReducer,
     PNGTree: convertToPNGReducer,
     PDFTree:convertToPDFReducer,
     familyCSV:generateFamilyCSVReducer,
+    memberEdit:memberEditReducer,
+    newMember:memberNewReducer,
+    memberRelatives:memberRelativesReducer,
 
     // Blog Reducers
     newPost:createPostReducer,
     news:listPostsReducer,
-    post:getPostReducer
+    post:getPostReducer,
+    removePost:deletePostReducer
 
 })
 

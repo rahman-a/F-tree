@@ -7,7 +7,10 @@ import {
     POSTS_LIST_FAIL,
     GET_POST_REQUEST,
     GET_POST_SUCCESS,
-    GET_POST_FAIL
+    GET_POST_FAIL,
+    DELETE_POST_REQUEST,
+    DELETE_POST_SUCCESS,
+    DELETE_POST_FAIL
 } from '../constants/blogConstant'
 import blogServices from '../services/blogsServices'
 
@@ -16,6 +19,7 @@ export const createPost = (post) => async(dispatch) => {
     dispatch({type:POST_CREATE_REQUEST})
     try {
         const {data} = await blogServices.create(post)
+        console.log(data);
         dispatch({type:POST_CREATE_SUCCESS, payload:data.message})
     } catch (error) {
         console.log(error.response);
@@ -49,6 +53,20 @@ export const getOnePost = (id) => async(dispatch) => {
         console.log(error.response);
         dispatch({
             type:GET_POST_FAIL,
+            payload:error.response && error.response.data.error
+        })
+    }
+}
+
+export const deletePost = (id) => async(dispatch) => {
+    dispatch({type:DELETE_POST_REQUEST})
+    try {
+        const {data} = await blogServices.delete(id)
+        dispatch({type:DELETE_POST_SUCCESS, payload:data.message})
+    } catch (error) {
+        console.log(error.response);
+        dispatch({
+            type:DELETE_POST_FAIL,
             payload:error.response && error.response.data.error
         })
     }

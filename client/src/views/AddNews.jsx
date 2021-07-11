@@ -47,9 +47,10 @@ const AddNews = () => {
         const data = new FormData()
         data.append('title', title)
         data.append('body', text)
-        data.append('image', img)
         data.append('members', JSON.stringify(members))
-        console.log(members);
+        for(let i = 0; i < img.length; i++){
+            data.append('image', img[i])
+        }
         dispatch(createPost(data))
     }
 
@@ -69,7 +70,6 @@ const AddNews = () => {
 
                         <Form.Group controlId="formBasicNews">
                             <Form.Label>موضوع الخبر</Form.Label>
-                            {/* <Form.Control as="textarea" rows={10} placeholder="أضف الخبر هنا" required/> */}
                             <div className="editor cke_rtl" style={{color:'#000'}}>
                                 <CKEditor
                                 editor={ClassicEditor}
@@ -102,7 +102,7 @@ const AddNews = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formBasicImage">
-                            <Form.File id="exampleFormControlFile1" label="أرفق صورة للخبر" onChange={(e) => setImg(e.target.files[0])}/>
+                            <Form.File id="exampleFormControlFile1" multiple label="أرفق صورة للخبر" onChange={(e) => setImg(e.target.files)}/>
                         </Form.Group>
 
                         <Button variant="primary" type="submit">

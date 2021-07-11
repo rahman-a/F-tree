@@ -13,6 +13,7 @@ node_modules/
 .DS_Store
 .env.local
 /.env
+controllerAlt.js
 .env.development.local
 .env.test.local
 .env.production.local

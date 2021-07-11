@@ -21,10 +21,10 @@ app.use(express.json())
 app.use(cors())
 app.use(morgan('dev'))
 
-
 app.use('/api/users', userRouter)
 app.use('/api/members', memberRouter)
 app.use('/api/blogs', blogRouter)
+app.use('/uploads', express.static(path.resolve('server/src/uploads')))
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '/client/build')))
     app.get('*', (req, res) => {

@@ -4,6 +4,9 @@ const services = {
     uploadCSV(csv) {
         return api().post('members/upload-csv', csv)
     },
+    addRelatives(info){
+        return api().patch('members/relatives', info)
+    },
     generateCSV(count){
         return api().get(`members/generate-csv/${count}`)
     },
@@ -33,6 +36,12 @@ const services = {
     },
     getCSVData(){
         return api().get('members/export-csv')
+    },
+    edit(info) {
+        return api().patch('members/edit', info)
+    },
+    create(info) {
+        return api().post('members/new', info)
     }
 }
 

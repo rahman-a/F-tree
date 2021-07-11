@@ -56,8 +56,10 @@ const Home = () => {
       }
 
     const SVGTOPNGHandler = async  _ => {
-        const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
-        dispatch(convertToPNG(svgString))
+        if(document.querySelector('svg')){
+            const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
+            dispatch(convertToPNG(svgString))
+        }
        
     }
     // const SVGTOPDFHandler = async  _ => {
@@ -153,9 +155,9 @@ const Home = () => {
                 <Button variant='warning' onClick={SVGTOPNGHandler}>
                     تصدير الشجرة كـ PNG
                 </Button>
-                {/* <Button variant='danger' onClick={SVGTOPDFHandler}>
-                تصدير الشجرة كـ PDF
-                </Button> */}
+                <Button variant='danger' onClick={() => history.push('/new')}>
+                    إضافة عضو جديد
+                </Button>
                 </>} 
                 <Button variant='info' onClick={() => setIsProfile(!isProfile)}> 
                     وضع العرض 
