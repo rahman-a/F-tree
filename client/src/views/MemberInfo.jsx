@@ -315,7 +315,7 @@ const MemberInfo = () => {
                                     <Col className='member__col_data2'>
                                         <figure className='member__photo' onClick={() => setIsUploadAvatar(true)}>
                                          <img 
-                                         src={info.image ? `http://localhost:5000/uploads/${info.image}` : '/image/avatar.jpg'} 
+                                         src={info.image ? `/uploads/${info.image}` : '/image/avatar.jpg'} 
                                          alt="صورة العضو" />
                                         </figure>
                                     </Col>
