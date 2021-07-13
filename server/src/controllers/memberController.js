@@ -8,7 +8,7 @@ import csvParser from 'csv-parser'
 import ObjectId from 'bson-objectid'
 import objectToCSV from 'objects-to-csv'
 import sharp from 'sharp'
-import pdf from 'html-pdf'
+// import pdf from 'html-pdf'
 import pkg from 'convert-svg-to-png'
 const {convert} = pkg
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -398,4 +398,27 @@ export const exportDataAsCSV = async(req, res, next) => {
     } catch (error) {
         next(error)
     }  
+}
+
+export const searchByName = async(req, res, next) => {
+    const keyword = req.query.keyword ? {
+        firstName:{
+            $regex:req.query.keyword,
+            $options:'i'
+        }
+    } : {}
+    try {
+        const members = await Member.find({...keyword})
+        if(!members || members.length === 0){
+            res.status(404)
+            throw new Error('لم يتم العثور على اى أعضاء....')
+        }
+        const membersData = await Promise.all(members.map(async m => {
+            const name = await memberFullName(m._doc._id)
+            return {_id:m._id, id:`${m.firstName} ${name}`, name:`${m.firstName} ${name}`}
+        }))
+        res.status(200).send({members:membersData})
+    } catch (error) {
+        next(error)
+    }
 }

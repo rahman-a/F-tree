@@ -7,6 +7,7 @@ export const createNewBlog = async(req, res ,next) => {
             ...req.body
         })
         if(req.files){
+            console.log(req.files);
             let path = ''
             req.files.forEach(file => {
                 path = path + file.filename + ','

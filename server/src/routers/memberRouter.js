@@ -11,6 +11,7 @@ const router  = express.Router()
     getAllMembers,
     editMemberById,
     createNewMember,
+    searchByName,
     SvgToPng,
     exportDataAsCSV
  } from '../controllers/memberController.js'
@@ -22,6 +23,7 @@ router.get('/generate-csv/:count', userAuth, isCoAdmin,generateCSVTemplate )
 router.get('/export-csv', userAuth, isCoAdmin,exportDataAsCSV )
 router.get('/import-data', userAuth,extractTreeData)
 router.get('/all', userAuth, isCoAdmin, getAllMembers)
+router.get('/search', userAuth, isCoAdmin, searchByName)
 router.get('/:id', userAuth,getMemberInfoById)
 router.get('/avatar/:id', userAuth,getMemberAvatar)
 router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAvatarUpload)

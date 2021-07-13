@@ -33,7 +33,7 @@ export const avatarUpload = multer({
     fileSize:10000000
   },
   fileFilter(req, file, cb){
-    if(!file.originalname.match(/\.(png|jpeg|jpg|JPG|JPEG)$/)) {
+    if(!file.originalname.match(/\.(png|PNG|jpeg|jpg|JPG|JPEG)$/)) {
       return cb(new Error('من فضلك إرفع صورة بامتداد png أو jpeg او jpg'))
     }
     cb(undefined, true)
@@ -46,7 +46,7 @@ export const imageUpload = multer({
     fileSize:10000000
   },
   fileFilter(req, file, cb){
-    if(!file.originalname.match(/\.(png|jpeg|jpg|JPG|JPEG)$/)) {
+    if(!file.originalname.match(/\.(png|PNG|jpeg|jpg|JPG|JPEG)$/)) {
       return cb(new Error('من فضلك إرفع صورة بامتداد png أو jpeg او jpg'))
     }
     cb(undefined, true)
