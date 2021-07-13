@@ -500,7 +500,7 @@ button:disabled {
   all: unset;
   background-color: azure;
   width: 3rem !important;
-  margin-right: 1rem;
+  margin: 0 1rem 0 0 !important;
   color: #460202;
   display: inline-flex;
   justify-content: center;
@@ -519,11 +519,24 @@ button:disabled {
   color: var(--main-color);
   cursor: pointer; }
 
+.tag-wrapper{ 
+  margin-top:1rem;
+  margin-bottom:1rem;
+}
 .member__wrapper {
   display: flex;
   justify-content: center;
   margin-top: 5rem; }
 
+  .spouseSelect .tag-wrapper {
+    position: relative;
+    padding:0.5rem;
+  }
+  .spouseSelect .ReactTags__remove {
+    position: absolute;
+    top: 0;
+    height: 3rem;
+  }
 .member__info {
   width: 75%; }
 

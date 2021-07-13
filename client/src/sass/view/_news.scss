@@ -158,3 +158,20 @@
         cursor: pointer;
     }
 }
+
+.tag-wrapper{ 
+    margin-top:1rem;
+    margin-bottom:1rem;
+  }
+
+.spouseSelect {
+.tag-wrapper {
+    position: relative;
+    padding:0.5rem;
+    }
+.ReactTags__remove {
+    position: absolute;
+    top: 0;
+    height: 3rem;
+    }
+}

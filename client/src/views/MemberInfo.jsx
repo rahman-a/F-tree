@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect} from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {useParams, Link} from 'react-router-dom'
+import { WithContext as ReactTags } from 'react-tag-input';
 import {
     getMemberInfo, 
     uploadMemberAvatar,
     memberEdit, 
-    addRelativesMember
+    addRelativesMember,
+    getMembersBySearch
 } from '../actions/memberActions'
 import {MEMBER_EDIT_CLEAR, MEMBER_ADD_RELATIVES_CLEAR} from '../constants/memberConstant'
 import Template from "../components/Template"
@@ -23,12 +25,21 @@ import Loader from '../components/Loader'
 import Popup from "../components/PopupMessage"
 import {ConvertToArabicNumbers} from '../helpers'
 
+const KeyCodes = {
+    enter: 13
+}
+
+const delimiters = [KeyCodes.enter];
+
 const MemberInfo = () => {
     const {id} = useParams()
     const [isAddRelative, setIsAddRelative] = useState(false)
+    const [isSpouseTags, setIsSpouseTags] = useState(false)
     const [relativeData, setRelativeData] = useState(null)
-    const [addSpouse, setAddSpouse] = useState('')
-    const [addChildren, setAddChildren] = useState('')
+    const [spouseTags, setSpouseTags] = useState([])
+    const [childrenTags, setChildrenTags] = useState([])
+    const [childrenSuggestions, setChildrenSuggestions] = useState([])
+    const [spouseSuggestions, setSpouseSuggestions] = useState([])
     const [isFullName, setIsFullName]  = useState(false)
     const [formInfo, setFormInfo]  = useState({id})
     const dispatch = useDispatch()
@@ -36,6 +47,7 @@ const MemberInfo = () => {
     const {loading:loading_u, error:error_u, message} = useSelector(state => state.photoUpload)
     const {loading:loading_e, error:error_e, message:message_e} = useSelector(state => state.memberEdit)
     const {loading:loading_r, error:error_r, message:message_r} = useSelector(state => state.memberRelatives)
+    const {loading:loading_sg, error:error_sg, members} = useSelector(state => state.memberSearch)
     const [isUploadAvatar, setIsUploadAvatar] = useState(false)
     
     const uploadAvatarHandler = e => {
@@ -46,40 +58,86 @@ const MemberInfo = () => {
       dispatch(uploadMemberAvatar(data))
     }
     
-      const editMemberHandler = e => {
-            e.preventDefault()
-            dispatch(memberEdit(formInfo))
-            console.log(formInfo)
-      }
-    const setRelativeDataHandler = e => {
+    const handleSpouseDelete = i => {
+        const newTags = spouseTags.filter((tag, index) => index !== i )
+        setSpouseTags(newTags)
+    }
+
+    const handleSpouseAddition = t => {
+        const newTags = [...spouseTags, t]
+        setSpouseTags(newTags)
+    }
+
+    const handleSpouseInputChange = value => {
+        setIsSpouseTags(true)
+        dispatch(getMembersBySearch(value))
+    }
+    const handleChildrenDelete = i => {
+        const newTags = childrenTags.filter((tag, index) => index !== i )
+        setChildrenTags(newTags)
+    }
+
+    const handleChildrenAddition = t => {
+        const newTags = [...childrenTags, t]
+        setChildrenTags(newTags)
+    }
+
+    const handleChildrenInputChange = value => {
+        setIsSpouseTags(false)
+        dispatch(getMembersBySearch(value))
+    }
+    const editMemberHandler = e => {
         e.preventDefault()
-        let data = null
+        dispatch(memberEdit(formInfo))
+        console.log(formInfo)
+    }
+    const setRelativeDataHandler = _ => {
         if(info && info.gender === 'ذكر'){
-            data = []
+            const data = []
             data.push({
-                name:addSpouse,
-                children:addChildren.split('-')
+                name:spouseTags[0]._id ?spouseTags[0]._id:spouseTags[0].name, 
+                children:childrenTags.map(ch => {
+                    if(ch._id){
+                        return ch._id
+                    }else{
+                        return ch.name
+                    }
+                })
             })
-            if(relativeData) {
-                setRelativeData([...relativeData,...data])
-            }else {
-                setRelativeData(data)
-            }
+            relativeData ? setRelativeData([...relativeData, ...data]):setRelativeData(data)
         }else {
-            data = {
-                name:addSpouse,
-                children: addChildren.split('-')
-            }
-            setRelativeData(data)  
+            setRelativeData({
+                name:spouseTags[0]._id ? spouseTags[0]._id :spouseTags[0].name,
+                children:childrenTags.map(ch => {
+                    if(ch._id){
+                        return ch._id
+                    }else{
+                        return ch.name
+                    }
+                })
+            })
         }
+        console.log(spouseTags, childrenTags)
+        setSpouseTags([])
+        setChildrenTags([])
         setIsAddRelative(false)
     }
     const addRelativeHandler = _ => {
         dispatch(addRelativesMember({_id:id,data:relativeData}))
     }
     useEffect(() => {
-       dispatch(getMemberInfo(id))
-    },[dispatch,id])
+        if(members){
+            isSpouseTags ? setSpouseSuggestions(members) : setChildrenSuggestions(members) 
+        }else if(loading_sg){
+            setSpouseSuggestions([{id:'جارى البحث ...', name:"جارى البحث ..."}])
+        }else if(error_sg){
+            setSpouseSuggestions([{id:error_sg, name:error_sg}])
+        }
+        if(!info || info._id !== id){
+            dispatch(getMemberInfo(id))
+        }
+        console.log(id)
+    },[dispatch, id,info, isSpouseTags, members, loading_sg, error_sg])
 
     return (
         <Template>
@@ -257,7 +315,7 @@ const MemberInfo = () => {
                                     <Col className='member__col_data2'>
                                         <figure className='member__photo' onClick={() => setIsUploadAvatar(true)}>
                                          <img 
-                                         src={info.image ? `/uploads/${info.image}` : '/image/avatar.jpg'} 
+                                         src={info.image ? `http://localhost:5000/uploads/${info.image}` : '/image/avatar.jpg'} 
                                          alt="صورة العضو" />
                                         </figure>
                                     </Col>
@@ -350,24 +408,39 @@ const MemberInfo = () => {
                             passHandler={() => dispatch({type:MEMBER_ADD_RELATIVES_CLEAR})}> <p>{error_r}</p></Popup> 
                             :message_r && <Popup success 
                             passHandler={() => dispatch({type:MEMBER_ADD_RELATIVES_CLEAR})}> <p>{message_r}</p></Popup> }
-                            {isAddRelative && <Form onSubmit={(e) => setRelativeDataHandler(e)}>
-                                <Form.Group controlId="formBasicSpouse"> 
-                                    <Form.Control 
-                                    type="text"
-                                    onChange={({target:{value}}) => setAddSpouse(value)} 
-                                    required
-                                    placeholder={info.gender === 'ذكر' ?'أضف اسم الزوجة' :'أضف اسم الزوج'}/>
-                                    <Form.Control 
-                                    as="textarea" 
-                                    placeholder='أضف الأولاد مفصولاً بينهم بشرطة -'
-                                    onChange={({target:{value}}) => setAddChildren(value)} 
-                                    style={{margin:'1rem 0', fontSize:'1.6rem', direction:'ltr'}}/>
-                                </Form.Group>
-                                <Button variant="primary" type="submit" style={{margin:0}}>
-                                تم
-                                </Button>
-                            </Form>}
-                            {addSpouse && <Button variant="primary" onClick={addRelativeHandler}>
+                            {isAddRelative && <div style={{width:'30rem', margin:'1rem 0'}}>
+                            <ReactTags
+                            placeholder={info.gender === 'ذكر' ? 'أضف إسم الزوجة' : 'أضف اسم الزوج'}
+                            tags={spouseTags}
+                            suggestions={spouseSuggestions}
+                            labelField={'name'}
+                            handleDelete={handleSpouseDelete}
+                            handleAddition={handleSpouseAddition}
+                            handleInputChange={handleSpouseInputChange}
+                            delimiters={delimiters}
+                            allowDeleteFromEmptyInput={false}
+                            allowDragDrop={false}
+                            inputProps={{disabled:spouseTags.length > 0}}
+                            classNames={{selected:'spouseSelect'}}
+                            />
+                             <div style={{height:'1rem'}}></div> 
+                            <ReactTags
+                            placeholder='أضف الأولاد'
+                            tags={childrenTags}
+                            suggestions={childrenSuggestions}
+                            labelField={'name'}
+                            handleDelete={handleChildrenDelete}
+                            handleAddition={handleChildrenAddition}
+                            handleInputChange={handleChildrenInputChange}
+                            delimiters={delimiters}
+                            allowDeleteFromEmptyInput={false}
+                            allowDragDrop={false}
+                            autofocus={false}
+                            />
+                            {(spouseTags.length > 0 || childrenTags.length > 0)
+                            &&<Button variant="primary" onClick={setRelativeDataHandler}>تم</Button>}  
+                            </div>}
+                            {<Button variant="primary" onClick={addRelativeHandler}>
                                حفظ
                             </Button>}
                         </div>

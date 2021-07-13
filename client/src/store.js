@@ -25,7 +25,8 @@ import {
     convertToPNGReducer,
     convertToPDFReducer,
     generateFamilyCSVReducer,
-    memberRelativesReducer
+    memberRelativesReducer,
+    memberSearchByNameReducer
 } from './reducers/memberReducer'
 
 import {
@@ -59,6 +60,7 @@ const reducers = combineReducers({
     memberEdit:memberEditReducer,
     newMember:memberNewReducer,
     memberRelatives:memberRelativesReducer,
+    memberSearch: memberSearchByNameReducer,
 
     // Blog Reducers
     newPost:createPostReducer,

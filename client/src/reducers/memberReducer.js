@@ -9,6 +9,9 @@ import {
     MEMBER_ADD_RELATIVES_REQUEST,
     MEMBER_ADD_RELATIVES_SUCCESS,
     MEMBER_ADD_RELATIVES_FAIL,
+    MEMBER_SEARCH_BY_NAME_REQUEST,
+    MEMBER_SEARCH_BY_NAME_SUCCESS,
+    MEMBER_SEARCH_BY_NAME_FAIL,
     MEMBER_ADD_RELATIVES_CLEAR,
     MEMBER_CREATE_REQUEST,
     MEMBER_CREATE_SUCCESS,
@@ -211,6 +214,19 @@ export const generateFamilyCSVReducer = (state = {}, action) => {
             return {loading:false, error:action.payload}
         case MEMBER_GENERATE_FAMILY_CSV_CLEAR:
             return {error:null, familyCSV:null}
+        default:
+            return state
+    }
+}
+
+export const memberSearchByNameReducer = (state = {}, action) => {
+    switch(action.type){
+        case MEMBER_SEARCH_BY_NAME_REQUEST:
+            return {loading:true, error:null}
+        case MEMBER_SEARCH_BY_NAME_SUCCESS:
+            return {loading:false, error:null, members:action.payload}
+        case MEMBER_SEARCH_BY_NAME_FAIL:
+            return {loading:false, error:action.payload}
         default:
             return state
     }

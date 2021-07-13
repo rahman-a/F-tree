@@ -42,6 +42,9 @@ const services = {
     },
     create(info) {
         return api().post('members/new', info)
+    },
+    searchByName(name){
+        return api().get(`members/search?keyword=${name}`)
     }
 }
 

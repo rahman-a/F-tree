@@ -1,29 +1,34 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Template from "../components/Template"
 import {Button, Form, Container, Alert} from 'react-bootstrap'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { WithContext as ReactTags } from 'react-tag-input';
 import {createPost} from '../actions/blogActions'
+import {getMembersBySearch} from '../actions/memberActions'
+import {POST_CREATE_CLEAR} from '../constants/blogConstant'
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 
 const KeyCodes = {
-    comma: 188,
-    enter: 13,
+    enter: 13
 };
 
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
+const delimiters = [KeyCodes.enter];
 
 const AddNews = () => {
   const [text, setText] = useState('')
   const [title, setTitle] = useState('')
+  const [suggestions, setSuggestions] = useState([])
   const [img, setImg] = useState('')
   const [tags, setTags] = useState([])
   const dispatch = useDispatch()
   const {loading, error, message} = useSelector(state => state.newPost)
+  const {loading:loading_sg, error:error_sg, members} = useSelector(state => state.memberSearch)
   
-
+ const handleInputChange = value => {
+    dispatch(getMembersBySearch(value))
+ }
   
   const handleDelete = i => {
         const newTags = tags.filter((tag, index) => index !== i )
@@ -40,7 +45,7 @@ const AddNews = () => {
         e.preventDefault()
         const members = tags.map(tag => {
             return {
-                _id:tag.id
+                _id:tag._id
             }
         })
         
@@ -53,7 +58,18 @@ const AddNews = () => {
         }
         dispatch(createPost(data))
     }
-
+    useEffect(() => {
+        if(members) {
+            setSuggestions([...members])
+        }else if(loading_sg){
+            setSuggestions([{id:'جارى البحث ...', name:"جارى البحث ..."}])
+        }else if(error_sg){
+            setSuggestions([{id:error_sg, name:error_sg}])
+        }
+        return () => {
+            dispatch({type:POST_CREATE_CLEAR})
+        }
+    }, [members, loading_sg, error_sg, dispatch])
     return (
         <Template>
             <h2 className="main__title">إنشاء خبر جديد</h2>
@@ -96,8 +112,11 @@ const AddNews = () => {
                                 inline
                                 placeholder='أضف المعرف الخاص بالعضو'
                                 tags={tags}
+                                suggestions={suggestions}
+                                labelField={'name'}
                                 handleDelete={handleDelete}
                                 handleAddition={handleAddition}
+                                handleInputChange={handleInputChange}
                                 delimiters={delimiters} />
                         </Form.Group>
 

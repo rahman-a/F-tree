@@ -7,9 +7,6 @@ const MemberInfo = ({info, idx}) => {
     if(query.get('page')) { 
         idx += (query.get('page') - 1)* 10
     }
-    if(info){
-        console.log('info inside: ',info)
-    }
     return (
         <tr>
             <td>{idx}</td>

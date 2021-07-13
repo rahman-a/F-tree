@@ -8,6 +8,9 @@ import {
     MEMBER_CREATE_REQUEST,
     MEMBER_CREATE_SUCCESS,
     MEMBER_CREATE_FAIL,
+    MEMBER_SEARCH_BY_NAME_REQUEST,
+    MEMBER_SEARCH_BY_NAME_SUCCESS,
+    MEMBER_SEARCH_BY_NAME_FAIL,
     MEMBER_ADD_RELATIVES_REQUEST,
     MEMBER_ADD_RELATIVES_SUCCESS,
     MEMBER_ADD_RELATIVES_FAIL,
@@ -208,6 +211,20 @@ export const userGenerateFamilyCSV = () => async(dispatch) => {
         console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_CSV_FAIL,
+            payload: error.response && error.response.data.error
+        })
+    }
+}
+
+export const getMembersBySearch = (name) => async(dispatch) => {
+    dispatch({type:MEMBER_SEARCH_BY_NAME_REQUEST})
+    try {
+        const {data} = await memberServices.searchByName(name)
+        dispatch({type:MEMBER_SEARCH_BY_NAME_SUCCESS, payload:data.members})
+    } catch (error) {
+        console.log(error.response);
+        dispatch({
+            type:MEMBER_SEARCH_BY_NAME_FAIL,
             payload: error.response && error.response.data.error
         })
     }

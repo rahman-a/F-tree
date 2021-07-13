@@ -2,6 +2,7 @@ import {
     POST_CREATE_REQUEST,
     POST_CREATE_SUCCESS,
     POST_CREATE_FAIL,
+    POST_CREATE_CLEAR,
     POSTS_LIST_REQUEST,
     POSTS_LIST_SUCCESS,
     POSTS_LIST_FAIL,
@@ -21,6 +22,8 @@ export const createPostReducer = (state = {}, action) => {
             return {loading:false, error:null, message:action.payload} 
         case POST_CREATE_FAIL:
             return {loading:false, error:action.payload}
+        case POST_CREATE_CLEAR:
+            return {message:null, error:null}
         default:
             return state
     }
