@@ -94,7 +94,6 @@ const MemberInfo = () => {
     const editMemberHandler = e => {
         e.preventDefault()
         dispatch(memberEdit(formInfo))
-        console.log(formInfo)
     }
     const setRelativeDataHandler = _ => {
         if(spouseTags.length > 0){
@@ -469,7 +468,7 @@ const MemberInfo = () => {
                             {(spouseTags.length > 0 || childrenTags.length > 0)
                             &&<Button variant="primary" onClick={setRelativeDataHandler}>تم</Button>}  
                             </div>}
-                            {isAddRelative && <Button variant="primary" onClick={addRelativeHandler}>
+                            {relativeData && <Button style={{display:'block'}} variant="primary" onClick={addRelativeHandler}>
                                حفظ
                             </Button>}</>}
                         </div>
