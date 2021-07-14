@@ -22,16 +22,14 @@ const Tree = ({familyData,isProfile}) => {
     const createTree = () => {
         wrapperRef.current.innerHTML = '';
         const margin = {top: 140, right: 0, bottom: 20, left: 0}
+        wrapperRef.current.width = wrapperRef.current.getBoundingClientRect().width
+        wrapperRef.current.height = wrapperRef.current.getBoundingClientRect().height
         const innerHeight = 2000 - margin.top - margin.bottom;
         const svg = d3.select(wrapperRef.current)
                     .append('svg')
                     .attr('width', 4000)
-                    .attr('height', 2250)
-                    .call(d3.zoom().scaleExtent([0.1, 5]).on('zoom', (event) => {
-                        svg.attr('transform', () =>{
-                            return `scale(${event.transform.k})`
-                        })
-                    }))
+                    .attr('height', 2200)
+                    
         const width = +svg.attr("width")
         const height = +svg.attr("height")
         const g = svg.append("g")

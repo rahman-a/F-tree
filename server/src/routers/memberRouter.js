@@ -12,6 +12,7 @@ const router  = express.Router()
     editMemberById,
     createNewMember,
     searchByName,
+    removeSpouseById,
     SvgToPng,
     exportDataAsCSV
  } from '../controllers/memberController.js'
@@ -30,6 +31,7 @@ router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAv
 router.post('/convertSvgTOPng', userAuth, isCoAdmin, SvgToPng)
 router.patch('/edit', userAuth, isCoAdmin, editMemberById)
 router.patch('/relatives', userAuth, isCoAdmin, addSpouseAndChildren)
+router.patch('/del-relatives', userAuth, isCoAdmin, removeSpouseById)
 router.post('/new', userAuth, isCoAdmin, createNewMember)
 
 

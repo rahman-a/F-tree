@@ -45,6 +45,9 @@ const services = {
     },
     searchByName(name){
         return api().get(`members/search?keyword=${name}`)
+    },
+    deleteRelatives(info){
+        return api().patch('members/del-relatives', info)
     }
 }
 

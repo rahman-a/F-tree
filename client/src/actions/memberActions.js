@@ -14,6 +14,9 @@ import {
     MEMBER_ADD_RELATIVES_REQUEST,
     MEMBER_ADD_RELATIVES_SUCCESS,
     MEMBER_ADD_RELATIVES_FAIL,
+    MEMBER_DELETE_RELATIVES_REQUEST,
+    MEMBER_DELETE_RELATIVES_SUCCESS,
+    MEMBER_DELETE_RELATIVES_FAIL,
     MEMBER_GENERATE_CSV_REQUEST,
     MEMBER_GENERATE_CSV_SUCCESS,
     MEMBER_GENERATE_CSV_FAIL,
@@ -62,6 +65,20 @@ export const addRelativesMember = (info) => async(dispatch) => {
         console.log(error.response);
         dispatch({
             type:MEMBER_ADD_RELATIVES_FAIL,
+            payload: error.response && error.response.data.error
+        })
+    }
+}
+
+export const deleteRelativesMember = (info) => async(dispatch) => {
+    dispatch({type:MEMBER_DELETE_RELATIVES_REQUEST})
+    try {
+        const {data} = await memberServices.deleteRelatives(info)
+        dispatch({type:MEMBER_DELETE_RELATIVES_SUCCESS, payload:data.message})
+    } catch (error) {
+        console.log(error.response);
+        dispatch({
+            type:MEMBER_DELETE_RELATIVES_FAIL,
             payload: error.response && error.response.data.error
         })
     }

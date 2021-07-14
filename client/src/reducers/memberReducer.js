@@ -9,6 +9,10 @@ import {
     MEMBER_ADD_RELATIVES_REQUEST,
     MEMBER_ADD_RELATIVES_SUCCESS,
     MEMBER_ADD_RELATIVES_FAIL,
+    MEMBER_DELETE_RELATIVES_REQUEST,
+    MEMBER_DELETE_RELATIVES_SUCCESS,
+    MEMBER_DELETE_RELATIVES_FAIL,
+    MEMBER_DELETE_RELATIVES_CLEAR,
     MEMBER_SEARCH_BY_NAME_REQUEST,
     MEMBER_SEARCH_BY_NAME_SUCCESS,
     MEMBER_SEARCH_BY_NAME_FAIL,
@@ -71,6 +75,21 @@ export const memberRelativesReducer = (state = {}, action) => {
         case MEMBER_ADD_RELATIVES_FAIL:
             return {loading:false, error:action.payload}
         case MEMBER_ADD_RELATIVES_CLEAR:
+            return {message:null, error:null}
+        default:
+            return state
+    }
+}
+
+export const memberDeleteRelativesReducer = (state = {}, action) => {
+    switch(action.type){
+        case MEMBER_DELETE_RELATIVES_REQUEST:
+            return {loading:true, error:null}
+        case MEMBER_DELETE_RELATIVES_SUCCESS:
+            return {loading:false, error:null, message:action.payload}
+        case MEMBER_DELETE_RELATIVES_FAIL:
+            return {loading:false, error:action.payload}
+        case MEMBER_DELETE_RELATIVES_CLEAR:
             return {message:null, error:null}
         default:
             return state

@@ -422,3 +422,23 @@ export const searchByName = async(req, res, next) => {
         next(error)
     }
 }
+
+
+export const removeSpouseById = async(req, res, next) => {
+    const {_id, spouseId} = req.body
+    console.log(_id, spouseId)
+    try {
+        const member = await Member.findById(_id)
+        if(member.gender && member.gender === 'ذكر'){
+            member.wivesAndChildren = member.wivesAndChildren.filter(n => n.name !== spouseId)
+            await member.save()
+            res.send({message:'تم حذف الزوجة بنجاح'})
+        }else{
+          res.status(400)
+          throw new Error('جدث خطأ ما من فضلك حاول مرة أخرى')
+        }
+        
+    } catch (error) {
+        next(error)
+    }
+}

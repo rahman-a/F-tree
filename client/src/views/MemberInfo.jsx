@@ -1,15 +1,17 @@
 import { useState, useEffect} from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {useParams, Link} from 'react-router-dom'
-import { WithContext as ReactTags } from 'react-tag-input';
+import { WithContext as ReactTags } from 'react-tag-input'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 import {
     getMemberInfo, 
     uploadMemberAvatar,
     memberEdit, 
     addRelativesMember,
-    getMembersBySearch
+    getMembersBySearch,
+    deleteRelativesMember
 } from '../actions/memberActions'
-import {MEMBER_EDIT_CLEAR, MEMBER_ADD_RELATIVES_CLEAR} from '../constants/memberConstant'
+import {MEMBER_EDIT_CLEAR, MEMBER_ADD_RELATIVES_CLEAR, MEMBER_DELETE_RELATIVES_CLEAR} from '../constants/memberConstant'
 import Template from "../components/Template"
 import {
     Form,Container, 
@@ -34,6 +36,7 @@ const delimiters = [KeyCodes.enter];
 const MemberInfo = () => {
     const {id} = useParams()
     const [isAddRelative, setIsAddRelative] = useState(false)
+    const [isCopied, setIsCopied] = useState(false)
     const [isSpouseTags, setIsSpouseTags] = useState(false)
     const [relativeData, setRelativeData] = useState(null)
     const [spouseTags, setSpouseTags] = useState([])
@@ -43,11 +46,13 @@ const MemberInfo = () => {
     const [isFullName, setIsFullName]  = useState(false)
     const [formInfo, setFormInfo]  = useState({id})
     const dispatch = useDispatch()
+    const {user} = useSelector(state => state.login)
     const {loading, error, info} = useSelector(state => state.profile)
     const {loading:loading_u, error:error_u, message} = useSelector(state => state.photoUpload)
     const {loading:loading_e, error:error_e, message:message_e} = useSelector(state => state.memberEdit)
     const {loading:loading_r, error:error_r, message:message_r} = useSelector(state => state.memberRelatives)
     const {loading:loading_sg, error:error_sg, members} = useSelector(state => state.memberSearch)
+    const {loading:loading_dr, error:error_dr, message:message_dr} = useSelector(state => state.relativeDelete)
     const [isUploadAvatar, setIsUploadAvatar] = useState(false)
     
     const uploadAvatarHandler = e => {
@@ -92,38 +97,49 @@ const MemberInfo = () => {
         console.log(formInfo)
     }
     const setRelativeDataHandler = _ => {
-        if(info && info.gender === 'ذكر'){
-            const data = []
-            data.push({
-                name:spouseTags[0]._id ?spouseTags[0]._id:spouseTags[0].name, 
-                children:childrenTags.map(ch => {
-                    if(ch._id){
-                        return ch._id
-                    }else{
-                        return ch.name
-                    }
+        if(spouseTags.length > 0){
+            if(info && info.gender === 'ذكر'){
+                const data = []
+                data.push({
+                    name:spouseTags[0]._id ?spouseTags[0]._id:spouseTags[0].name, 
+                    children:childrenTags.map(ch => {
+                        if(ch._id){
+                            return ch._id
+                        }else{
+                            return ch.name
+                        }
+                    })
                 })
-            })
-            relativeData ? setRelativeData([...relativeData, ...data]):setRelativeData(data)
-        }else {
-            setRelativeData({
-                name:spouseTags[0]._id ? spouseTags[0]._id :spouseTags[0].name,
-                children:childrenTags.map(ch => {
-                    if(ch._id){
-                        return ch._id
-                    }else{
-                        return ch.name
-                    }
+                relativeData ? setRelativeData([...relativeData, ...data]):setRelativeData(data)
+                
+            }else {
+                setRelativeData({
+                    name:spouseTags[0]._id ? spouseTags[0]._id :spouseTags[0].name,
+                    children:childrenTags.map(ch => {
+                        if(ch._id){
+                            return ch._id
+                        }else{
+                            return ch.name
+                        }
+                    })
                 })
-            })
+            }
+            setSpouseTags([])
+            setChildrenTags([])
+            setIsAddRelative(false)
         }
-        console.log(spouseTags, childrenTags)
-        setSpouseTags([])
-        setChildrenTags([])
-        setIsAddRelative(false)
     }
     const addRelativeHandler = _ => {
         dispatch(addRelativesMember({_id:id,data:relativeData}))
+    }
+
+    const deleteRelativeHandler = (e, name) => {
+        e.stopPropagation()
+        const confirm = window.confirm('هل أنت متاكد من حذف الزوجة')
+        if(confirm){
+            const data = {_id:id, spouseId:name}
+            dispatch(deleteRelativesMember(data))
+        }
     }
     useEffect(() => {
         if(members){
@@ -174,8 +190,8 @@ const MemberInfo = () => {
                 <strong><em>الإسم الكامل للعضو</em></strong>
             </Modal.Header>
             <Modal.Body>
-               {`${info.firstName} ${info.fullName ?info.fullName : ''}`} 
-               سعيد غنيم مفرج بركه محمد غنيم المرواني الجهني
+               {`${info.firstName} ${info.fullName ?info.fullName + ' ' : ''}`} 
+                سعيد غنيم مفرج بركه محمد غنيم المرواني الجهني
             </Modal.Body>
             </Modal>}
             {/* End Model for Full Name */}
@@ -184,6 +200,11 @@ const MemberInfo = () => {
             : error ? <Alert variant='danger'>{error}</Alert>
             :info && 
             <Container>
+                {(user.data.isAdmin || user.data.isCoAdmin) &&<CopyToClipboard text={id}
+                    onCopy={() => setIsCopied(true)}>
+                    <div style={{textAlign:'center'}}><Button style={{width:'fit-content', fontSize:'1.4rem'}} variant='light'>إضغط هنا لنسخ المعرف الخاص بالعضو</Button>
+                    <span style={{display:isCopied ? 'block' : 'none', color:'#81f781'}}>تم النسخ ✔</span></div>
+                </CopyToClipboard>}
                 {loading_e ? <Loader/> 
                 :error_e ? <Popup danger passHandler={() => dispatch({type:MEMBER_EDIT_CLEAR})}><p>{error_e}</p></Popup>
                 :message_e && <Popup success passHandler={() => dispatch({type:MEMBER_EDIT_CLEAR})}><p>{message_e}</p></Popup>}
@@ -313,16 +334,16 @@ const MemberInfo = () => {
                                         </Form.Group>
                                     </Col>
                                     <Col className='member__col_data2'>
-                                        <figure className='member__photo' onClick={() => setIsUploadAvatar(true)}>
+                                        <figure className='member__photo' onClick={() => (user.data.isAdmin || user.data.isCoAdmin) && setIsUploadAvatar(true)}>
                                          <img 
                                          src={info.image ? `/uploads/${info.image}` : '/image/avatar.jpg'} 
                                          alt="صورة العضو" />
                                         </figure>
                                     </Col>
                                 </Row>
-                                <Button variant="primary" type="submit">
+                                {(user.data.isCoAdmin || user.data.isAdmin) &&<Button variant="primary" type="submit">
                                 حفظ
-                                </Button>
+                                </Button>}
                             </Form>
                         </div>
                         {info.parent && <div className="member__relative_toggle" style={{color:'lavender'}}>
@@ -352,6 +373,11 @@ const MemberInfo = () => {
                                 </Card>
                             </Accordion>
                         </div>}
+                        {loading_dr ? <Loader/> 
+                            :error_dr ? <Popup danger 
+                            passHandler={() => dispatch({type:MEMBER_DELETE_RELATIVES_CLEAR})}> <p>{error_dr}</p></Popup> 
+                            :message_dr && <Popup success 
+                            passHandler={() => dispatch({type:MEMBER_DELETE_RELATIVES_CLEAR})}> <p>{message_dr}</p></Popup> }
                         <div className="member__data member__relative">
                             <h2 className='member__title'>{info.gender === 'ذكر' ? 'الزوجات والأولاد' : 'الزوج والأولاد'}</h2>
                             <div className='member__relative_toggle'>
@@ -364,6 +390,10 @@ const MemberInfo = () => {
                                                     ? <Link to={`/info/${d.id}`}>{d.name}</Link>
                                                     : d.name
                                                 }
+                                                {(info.isAdmin || info.isCoAdmin)&&d.name && <span 
+                                                className='member__relative_del'
+                                                onClick={(e) => d.id ? deleteRelativeHandler(e,d.id) : deleteRelativeHandler(e,d.name)}
+                                                >حذف</span>}
                                             </Accordion.Toggle>
                                             {d.children.map(c => {
                                             return <Link to={`/info/${c.id}`} key={c.id}>
@@ -375,7 +405,7 @@ const MemberInfo = () => {
                                         </Card>
                                         </>
                                     }) 
-                                    :<><Card>
+                                    :info.husbandAndChildren.name&& <><Card>
                                         <Accordion.Toggle as={Card.Header} eventKey='0'>
                                         {info.husbandAndChildren.id 
                                         ? <Link to={`/info/${info.husbandAndChildren.id}`}>{info.husbandAndChildren.name}</Link>
@@ -397,11 +427,10 @@ const MemberInfo = () => {
                                     </>}
                                     
                                 </Accordion>
-                                <div className= 'member__relative_name member__relative_add'
-                                onClick={() => setIsAddRelative(!isAddRelative)}>
-                                    {isAddRelative ? <i className="fas fa-minus"></i>:<i className="fas fa-plus"></i>}
-                                </div>
-                                
+                            </div>
+                            {(user.data.isAdmin || user.data.isCoAdmin)&&<><div className= 'member__relative_name member__relative_add'
+                            onClick={() => setIsAddRelative(!isAddRelative)}>
+                                {isAddRelative ? <i className="fas fa-minus"></i>:<i className="fas fa-plus"></i>}
                             </div>
                             {loading_r ? <Loader/> 
                             :error_r ? <Popup danger 
@@ -421,7 +450,7 @@ const MemberInfo = () => {
                             allowDeleteFromEmptyInput={false}
                             allowDragDrop={false}
                             inputProps={{disabled:spouseTags.length > 0}}
-                            classNames={{selected:'spouseSelect'}}
+                            
                             />
                              <div style={{height:'1rem'}}></div> 
                             <ReactTags
@@ -440,9 +469,9 @@ const MemberInfo = () => {
                             {(spouseTags.length > 0 || childrenTags.length > 0)
                             &&<Button variant="primary" onClick={setRelativeDataHandler}>تم</Button>}  
                             </div>}
-                            {<Button variant="primary" onClick={addRelativeHandler}>
+                            {isAddRelative && <Button variant="primary" onClick={addRelativeHandler}>
                                حفظ
-                            </Button>}
+                            </Button>}</>}
                         </div>
                         <h2 className='member__title'>الأخبار المرتبطة</h2>
                         <div className="member__data member__news">

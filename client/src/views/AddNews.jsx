@@ -110,7 +110,7 @@ const AddNews = () => {
                             <Form.Label>الأشخاص المرتبطين بالخبر</Form.Label>
                             <ReactTags
                                 inline
-                                placeholder='أضف المعرف الخاص بالعضو'
+                                placeholder='أضف اسم العضو المرتبط بالخبر'
                                 tags={tags}
                                 suggestions={suggestions}
                                 labelField={'name'}

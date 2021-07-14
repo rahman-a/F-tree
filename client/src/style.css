@@ -585,6 +585,20 @@ button:disabled {
     border-color: lavender;
     color: lavender; }
 
+.member__relative_del {
+    display: inline-block;
+    margin-right: 2rem;
+    border: 1px solid;
+    padding: 0px 0.5rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    color:#8b0404;
+}
+
+.member__relative_del:hover {
+ text-decoration: underline;
+}
+
 .member__relative form {
   display: flex;
   flex-direction: column;
@@ -823,7 +837,7 @@ button:disabled {
     font-size: 1.6rem;
     width: 18rem;
     text-align: right;
-    position: fixed !important;
+    position: absolute !important;
     z-index: 9999999; }
     .navigation__dropdown .dropdown-menu i {
       margin-left: 1rem; }
@@ -957,3 +971,9 @@ button:disabled {
   min-height: 100vh; }
   .tree__wrapper text {
     text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff; }
+@media (max-width: 61.99em){
+  .tree__wrapper {
+     overflow: unset;
+     min-width: fit-content
+  }
+}
