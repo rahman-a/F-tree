@@ -180,7 +180,7 @@ export const getMemberInfoById = async (req, res, next) => {
                             const fullName = await memberFullName(c)
                             return {id:child._id, name:`${child.firstName} ${fullName}`}
                         } else {
-                            throw new Error('نرجو إدخال معرف فى حقل الأولاد وليس اسم')
+                          return {name: c}
                         }
                     }))
                     if(ObjectId.isValid(w.name)){

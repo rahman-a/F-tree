@@ -42,7 +42,7 @@ const NewsInfo = () => {
                         حذف الخبر
                     </Button>}
                         <h2 className='news__title'>{post.title}</h2>
-                        <CarouselBlock images={post.image.split(',')}/>
+                        {post.image && <CarouselBlock images={post.image.split(',')}/>}
                         <p className='news__body'>{parser(post.body)}</p>
                     </div>
                 </div>}

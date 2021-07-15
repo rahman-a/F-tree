@@ -1,10 +1,6 @@
-import { useEffect } from "react"
 import { Carousel } from "react-bootstrap"
 
 const CarouselBlock = ({images}) => {
-    useEffect(() => {
-        console.log(images)
-    },[images])
     return (
         <Carousel>
            

@@ -225,14 +225,27 @@ const MemberInfo = () => {
                                                 إظهار الإسم كاملاً
                                             </button>
                                             <Form.Control type="text" 
-                                            defaultValue={`${info.firstName} ${info.fullName ?info.fullName : ''}`} 
+                                            defaultValue={info.firstName} 
                                             required
                                             name='firstName'
-                                            onFocus={({target}) => target.value = formInfo.firstName ? formInfo.firstName : info.firstName}
-                                            onBlur={({target}) => {
-                                                target.value = `${formInfo.firstName ? formInfo.firstName : info.firstName} ${info.fullName ? info.fullName : ''}`
-                                            }}
                                             onChange={({target}) => setFormInfo({...formInfo, [target.name]:target.value})}/>
+                                        </Form.Group>
+
+                                        <Form.Group controlId="formBasicParent">
+                                            <Form.Label>الأب</Form.Label>
+                                            <Form.Control type="text" 
+                                            defaultValue={info.fullName ? info.fullName : ''} 
+                                            required
+                                            name='parentId'
+                                            onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
+                                        </Form.Group>
+
+                                        <Form.Group controlId="formBasicMother">
+                                            <Form.Label>الأم</Form.Label>
+                                            <Form.Control type="text" 
+                                            defaultValue={info.mother ?info.mother.name : ''} 
+                                            name='mother'
+                                            onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
 
                                         <Form.Group controlId="exampleForm.ControlSelect2">
@@ -240,7 +253,7 @@ const MemberInfo = () => {
                                             <Form.Control as="select" 
                                             name='gender' 
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}
-                                            defaultValue={info.gender === 'ذكر' ? 'ذكر' : 'أنثى'}>
+                                            defaultValue={info.gender === "ذكر" ? "ذكر" :info.gender === "أنثى" ? "أنثى" : "الجنس"}>
                                             <option>الجنس</option>
                                             <option value='ذكر'>ذكر</option>
                                             <option value='أنثى'>أنثى</option>
@@ -251,7 +264,6 @@ const MemberInfo = () => {
                                             <Form.Label> العمر</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue={info.age ? ConvertToArabicNumbers(info.age) : ''} 
-                                            required
                                             name='age'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
@@ -259,34 +271,32 @@ const MemberInfo = () => {
                                         <Form.Group controlId="formBasicBirth">
                                             <Form.Label>تاريخ الميلاد</Form.Label>
                                             <Form.Control type="text" 
-                                            defaultValue={info.birthDate ? ConvertToArabicNumbers(info.birthDate) : ''}
-                                            required
+                                            defaultValue={info.birthDate ? info.birthDate: ''}
                                             name='birthDate'
                                             onFocus= {({target}) => target.type = 'date'}
                                             onBlur = {({target}) => {
                                                 target.type = 'text' 
-                                                target.value = formInfo.birthDate ? formInfo.birthDate :ConvertToArabicNumbers(info.birthDate)
+                                                target.value = formInfo.birthDate 
+                                                ? formInfo.birthDate 
+                                                :info.birthDate ? info.birthDate: ''
                                             }}
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}
                                             />
                                         </Form.Group>
-
+                                    </Col>
+                                    <Col className='member__col_data1'>
                                         <Form.Group controlId="formBasicBirth">
                                             <Form.Label>محل الإقامة</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue={info.address} 
-                                            required
                                             name='address'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
-                                    </Col>
-                                    <Col className='member__col_data1'>
 
                                         <Form.Group controlId="formBasicState">
                                             <Form.Label>الحالة الإجتماعية</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue={info.maritalStatus} 
-                                            required
                                             name='maritalStatus'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
@@ -295,7 +305,6 @@ const MemberInfo = () => {
                                             <Form.Label>الوظيفة</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue={info.job} 
-                                            required
                                             name='job'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
@@ -304,7 +313,6 @@ const MemberInfo = () => {
                                             <Form.Label>القطاع</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue={info.sector} 
-                                            required
                                             name='sector'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
@@ -313,7 +321,6 @@ const MemberInfo = () => {
                                             <Form.Label>رقم الجوال</Form.Label>
                                             <Form.Control type="tel" 
                                             defaultValue={info.phone ? ConvertToArabicNumbers(info.phone) : ''} 
-                                            required
                                             name='phone'
                                             onChange={({target}) => setFormInfo({...formInfo,[target.name]:target.value})}/>
                                         </Form.Group>
@@ -346,8 +353,8 @@ const MemberInfo = () => {
                             </Form>
                         </div>
                         {info.parent && <div className="member__relative_toggle" style={{color:'lavender'}}>
-                            <h2 className='member__title'>الاب والأم</h2>
-                             <Accordion style={{color:'#162635',margin:'1rem 0'}}>
+                            {/* <h2 className='member__title'>الاب والأم</h2> */}
+                             {/* <Accordion style={{color:'#162635',margin:'1rem 0'}}>
                                 <Card>
                                     <Accordion.Toggle as={Card.Header} eventKey="0">
                                     الأب
@@ -370,7 +377,7 @@ const MemberInfo = () => {
                                     }
                                     </Accordion.Collapse>
                                 </Card>
-                            </Accordion>
+                            </Accordion> */}
                         </div>}
                         {loading_dr ? <Loader/> 
                             :error_dr ? <Popup danger 
@@ -386,20 +393,26 @@ const MemberInfo = () => {
                                             <Accordion.Toggle as={Card.Header} eventKey={`${ind}`} >
                                                 {
                                                     d.id 
-                                                    ? <Link to={`/info/${d.id}`}>{d.name}</Link>
-                                                    : d.name
+                                                    ? <Link to={`/info/${d.id}`}><span className='member__relative_spouse
+                                                    '>{d.name}</span></Link>
+                                                    : <span className='member__relative_spouse
+                                                    '>{d.name}</span> 
                                                 }
-                                                {(info.isAdmin || info.isCoAdmin)&&d.name && <span 
+                                                {(user.data.isAdmin || user.data.isCoAdmin)&&d.name && <span 
                                                 className='member__relative_del'
                                                 onClick={(e) => d.id ? deleteRelativeHandler(e,d.id) : deleteRelativeHandler(e,d.name)}
                                                 >حذف</span>}
                                             </Accordion.Toggle>
                                             {d.children.map(c => {
-                                            return <Link to={`/info/${c.id}`} key={c.id}>
+                                            return c.id 
+                                            ? <Link to={`/info/${c.id}`} key={c.id}>
                                                 <Accordion.Collapse eventKey={`${ind}`}>
                                                     <Card.Body>{c.name}</Card.Body>
                                                 </Accordion.Collapse>
                                             </Link>
+                                            : <Accordion.Collapse eventKey={`${ind}`}>
+                                                    <Card.Body>{c.name}</Card.Body>
+                                               </Accordion.Collapse>
                                             })}
                                         </Card>
                                         </>

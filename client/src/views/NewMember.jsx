@@ -58,7 +58,6 @@ const NewMember = () => {
                                         <Form.Group controlId="formBasicName">
                                             <Form.Label>إضافةالأم</Form.Label>
                                             <Form.Control type="text"
-                                            required
                                             name='mother'
                                             onChange={(e) => onChangeHandler(e)}
                                             />
@@ -69,8 +68,9 @@ const NewMember = () => {
                                             <Form.Control as="select" 
                                             name='gender' 
                                             defaultValue=''
+                                            required
                                             onChange={(e) => onChangeHandler(e)}>
-                                            <option>الجنس</option>
+                                            <option value=''>الجنس</option>
                                             <option value='ذكر'>ذكر</option>
                                             <option value='أنثى'>أنثى</option>
                                             </Form.Control>
@@ -80,7 +80,6 @@ const NewMember = () => {
                                             <Form.Label> العمر</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue='' 
-                                            required
                                             name='age'
                                             onChange={(e) => onChangeHandler(e)}
                                            />
@@ -90,7 +89,6 @@ const NewMember = () => {
                                             <Form.Label>تاريخ الميلاد</Form.Label>
                                             <Form.Control type="date" 
                                             defaultValue=''
-                                            required
                                             name='birthDate'
                                             onChange={(e) => onChangeHandler(e)}
                                             />
@@ -102,7 +100,6 @@ const NewMember = () => {
                                             <Form.Label>الحالة الإجتماعية</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue=''
-                                            required
                                             name='maritalStatus'
                                             onChange={(e) => onChangeHandler(e)}
                                            />
@@ -112,7 +109,6 @@ const NewMember = () => {
                                             <Form.Label>الوظيفة</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue=''
-                                            required
                                             name='job'
                                             onChange={(e) => onChangeHandler(e)}
                                            />
@@ -122,7 +118,6 @@ const NewMember = () => {
                                             <Form.Label>القطاع</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue=''
-                                            required
                                             name='sector'
                                             onChange={(e) => onChangeHandler(e)}
                                             />
@@ -132,7 +127,6 @@ const NewMember = () => {
                                             <Form.Label>رقم الجوال</Form.Label>
                                             <Form.Control type="tel" 
                                             defaultValue='' 
-                                            required
                                             name='phone'
                                             onChange={(e) => onChangeHandler(e)}
                                            />
@@ -142,7 +136,6 @@ const NewMember = () => {
                                             <Form.Label>محل الإقامة</Form.Label>
                                             <Form.Control type="text" 
                                             defaultValue=''
-                                            required
                                             name='address'
                                             onChange={(e) => onChangeHandler(e)}
                                             />
