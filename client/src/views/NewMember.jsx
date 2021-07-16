@@ -22,7 +22,6 @@ const NewMember = () => {
     const submitFormHandler = e => {
         e.preventDefault()
         dispatch(createNewMember(formInfo))
-        console.log(formInfo)
     }
     return (
         <Template>

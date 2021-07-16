@@ -151,7 +151,6 @@ const MemberInfo = () => {
         if(!info || info._id !== id){
             dispatch(getMemberInfo(id))
         }
-        console.log(id)
     },[dispatch, id,info, isSpouseTags, members, loading_sg, error_sg])
 
     return (

@@ -14,7 +14,6 @@ const Reset = () => {
     const location  = useLocation()
     const history = useHistory()
     const query = new URLSearchParams(location.search)
-    message && console.log( message);
     const resetHandler = e => {
         e.preventDefault()
         if(password === confirmPassword){

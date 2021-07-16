@@ -36,7 +36,6 @@ export const userRegister = (credential) => async (dispatch) => {
         await userService.register(credential)
         dispatch({type:USER_REGISTER_SUCCESS})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_REGISTER_FAIL,
             payload:error.response.data.error
@@ -51,7 +50,6 @@ export const userLogin = (credential) => async (dispatch) => {
         dispatch({type:USER_LOGIN_SUCCESS, payload:data})
         localStorage.setItem('user', JSON.stringify(data))
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_LOGIN_FAIL,
             payload: error.response && error.response.data.error
@@ -65,7 +63,6 @@ export const userLogout = () => async (dispatch) => {
         dispatch({type:USER_LOGOUT, payload:null})
         localStorage.removeItem('user')
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_LOGOUT, 
             payload:error.response && error.response.data.error
@@ -81,7 +78,6 @@ export const userUpdate = (info) => async (dispatch) => {
         dispatch({type:USER_LOGIN_SUCCESS, payload:data})
         localStorage.setItem('user', JSON.stringify(data))
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_UPDATE_FAIL, 
             payload:error.response && error.response.data.error
@@ -103,7 +99,6 @@ export const userRemove = (id) => async (dispatch) => {
             dispatch({type:USER_REMOVE_SUCCESS})
         }
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_REMOVE_FAIL, 
             payload:error.response && error.response.data.error
@@ -117,7 +112,6 @@ export const userGetAll = (sort) => async (dispatch) => {
         const {data} = await userService.index(sort)
         dispatch({type:USER_ALL_SUCCESS, payload:data})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_ALL_FAIL, 
             payload:error.response && error.response.data.error
@@ -131,7 +125,6 @@ export const userActivate = (id) => async (dispatch) => {
         await userService.activate(id)
         dispatch({type:USER_ACTIVATE_SUCCESS})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_ACTIVATE_FAIL, 
             payload:error.response && error.response.data.error
@@ -145,7 +138,6 @@ export const userPromote = (id) => async (dispatch) => {
         await userService.promote(id)
         dispatch({type:USER_PROMOTE_SUCCESS})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_PROMOTE_FAIL, 
             payload:error.response && error.response.data.error
@@ -160,7 +152,6 @@ export const userResetPassLnk = (email) => async (dispatch) => {
         const {data} = await userService.resetPassLink(email)
         dispatch({type:USER_RESET_PASS_LINK_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_RESET_PASS_LINK_FAIL, 
             payload:error.response && error.response.data.error
@@ -174,7 +165,6 @@ export const userResetPassword = (credential) => async (dispatch) => {
         const {data} = await userService.resetPassword(credential)
         dispatch({type:USER_RESET_PASSWORD_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:USER_RESET_PASSWORD_FAIL, 
             payload:error.response && error.response.data.error

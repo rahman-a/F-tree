@@ -13,7 +13,6 @@ import {
     removeUserById,
     resetPassLink,
     resetPassword,
-    getUserData //test
 } from '../controllers/userController.js'
 
 
@@ -28,8 +27,6 @@ router.delete('/remove/:id', userAuth, isCoAdmin, removeUserById)
 router.patch('/activate/:id', userAuth, isCoAdmin, toggleUserActivation)
 router.get('/all', userAuth,isCoAdmin, getAllUsers)
 router.patch('/promote/:id', userAuth, isAdmin, toggleUserAsCoAdmin)
-
-router.get('/data', userAuth, getUserData) //test
 
 
 

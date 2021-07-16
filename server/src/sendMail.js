@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+// import nodemailer from 'nodemailer'
 
 const template = {
     reset(info){
@@ -7,6 +7,7 @@ const template = {
     color:#2b2c33; 
     padding:2rem;
     direction: rtl'>
+        <h1>موقع عائلة سعيد بن غنيم</h1>
         <p>مرحباً ${info.name}</p>
         <p>لقد طلبت إعادة تغيير كلمة المرور</p>
         <p>لتاكيد عملية التغيير اضغط على هذا الرابط</p>
@@ -34,36 +35,28 @@ const template = {
 }
 }
 
-const sendEmail = async (to, infoUrl, next) => {
-  try {
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      service:"gmail",
-      auth: {
-        user: 'ahmpeace.2010@gmail.com', // generated ethereal user
-        pass: 'ahm4055select189', // generated ethereal password
-      },
-    });
 
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: '" عائلة  الغنيم  👻" elghoniewm@test.com', // sender address
-      to, // list of receivers
-      subject: "إعادة ضبط كلمة المرور من موقع عائلة الغنيم", // Subject line
-      html: template.reset(infoUrl), // html body
-    });
+import mailgun from 'mailgun-js'
+import dotenv from 'dotenv'
+dotenv.config()
+const mg = mailgun({
+  apiKey:process.env.MG_APIKEY, 
+  domain:process.env.MG_DOMAIN
+})
 
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-  } catch (error) {
-    next(error)
-  }
-  
-  
+const sendEmail = async (info) => {
+  const data = {
+    from: 'noreplay@Ghoneim.com',
+    to: info.email,
+    subject: 'إعادة ضبط كلمة المرور',
+    html: template.reset(info)
+  };
+  mg.messages().send(data, function (error, body) {
+    if(error){
+      throw new Error(error)
+    }
+    console.log('BODY: ',body);
+  });
 }
 
 export default sendEmail

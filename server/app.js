@@ -9,8 +9,6 @@ import memberRouter from './src/routers/memberRouter.js'
 import blogRouter from './src/routers/blogRouter.js'
 import {notFound, errorHandler} from './src/middleware/errorHandler.js'
 import path from 'path'
-import {fileURLToPath} from 'url'
-const dirname = path.dirname(fileURLToPath(import.meta.url))
 const __dirname = path.resolve()
 
 const app = express()

@@ -426,7 +426,6 @@ export const searchByName = async(req, res, next) => {
 
 export const removeSpouseById = async(req, res, next) => {
     const {_id, spouseId} = req.body
-    console.log(_id, spouseId)
     try {
         const member = await Member.findById(_id)
         if(member.gender && member.gender === 'ذكر'){

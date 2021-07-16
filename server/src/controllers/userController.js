@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import randomstring from 'randomstring'
 import sendEmail from '../sendMail.js'
 
+
 export const createNewUser = async (req, res, next) => {
     const {email} = req.body 
     const newUser = new User(req.body)
@@ -171,17 +172,18 @@ export const resetPassLink = async(req, res, next) => {
         await user.save()
         
         // compose the url
-        const resetUrl = `${req.protocol}://${req.hostname}:3000/reset?TOKEN=${token}`
+        const resetUrl = `${req.protocol}://${req.hostname}/reset?TOKEN=${token}`
         const info = {
             link:resetUrl,
-            name:user.firstName
+            name:user.firstName,
+            email:email
         }
-        // send url to the user email
-        sendEmail('test_node_90@outlook.com', info, next)
-        res.status(200).send({message:'لقد تم إرسال الرابط بنجاح نرجو الذهاب الى البريد والضغط عليه'})
+        await sendEmail(info)
+        return res.status(200).send({message:'لقد تم إرسال الرابط بنجاح وبرجاء العلم انه سيصل اليك الرابط فى غضون ساعة أو اقل'})
     } catch (error) {
         next(error)
     }
+
     
 }
 
@@ -214,9 +216,4 @@ export const resetPassword = async(req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
-
-// test
-export const getUserData = async (req, res, next) => {
-    res.status(200).send(req.user)
 }

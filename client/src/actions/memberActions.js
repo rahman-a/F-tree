@@ -48,7 +48,6 @@ export const createNewMember = (info) => async(dispatch) => {
         const {data} = await memberServices.create(info)
         dispatch({type:MEMBER_CREATE_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_CREATE_FAIL,
             payload: error.response && error.response.data.error
@@ -62,7 +61,6 @@ export const addRelativesMember = (info) => async(dispatch) => {
         const {data} = await memberServices.addRelatives(info)
         dispatch({type:MEMBER_ADD_RELATIVES_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_ADD_RELATIVES_FAIL,
             payload: error.response && error.response.data.error
@@ -76,7 +74,6 @@ export const deleteRelativesMember = (info) => async(dispatch) => {
         const {data} = await memberServices.deleteRelatives(info)
         dispatch({type:MEMBER_DELETE_RELATIVES_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_DELETE_RELATIVES_FAIL,
             payload: error.response && error.response.data.error
@@ -88,10 +85,8 @@ export const getMemberInfo = (id) => async(dispatch) => {
     dispatch({type:MEMBER_INFO_REQUEST})
     try {
         const {data:{info}} = await memberServices.info(id)
-        console.log(info)
         dispatch({type:MEMBER_INFO_SUCCESS, payload:info})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_INFO_FAIL,
             payload: error.response && error.response.data.error
@@ -103,11 +98,8 @@ export const memberEdit = (info) => async(dispatch) => {
     dispatch({type:MEMBER_EDIT_REQUEST})
     try {
         const {data} = await memberServices.edit(info)
-        console.log(data.message)
-
         dispatch({type:MEMBER_EDIT_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_EDIT_FAIL,
             payload: error.response && error.response.data.error
@@ -122,7 +114,6 @@ export const userUploadCSV = (csv) => async(dispatch) => {
         const {data} = await memberServices.uploadCSV(csv)
         dispatch({type:MEMBER_UPLOAD_CSV_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_UPLOAD_CSV_FAIL,
             payload: error.response && error.response.data.error
@@ -136,7 +127,6 @@ export const userGenerateCSV = (count) => async(dispatch) => {
         const {data} = await memberServices.generateCSV(count)
         dispatch({type:MEMBER_GENERATE_CSV_SUCCESS, payload:data})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_CSV_FAIL,
             payload: error.response && error.response.data.error
@@ -150,7 +140,6 @@ export const userGenerateData = () => async(dispatch) => {
         const {data} = await memberServices.importTreeData()
         dispatch({type:MEMBER_GENERATE_DATA_SUCCESS, payload:data.familyData})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_DATA_FAIL,
             payload: error.response && error.response.data.error
@@ -165,7 +154,6 @@ export const uploadMemberAvatar = (id) => async(dispatch) => {
         const {data} = await memberServices.uploadImg(id)
         dispatch({type:MEMBER_UPLOAD_AVATAR_SUCCESS, payload:data.message})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_UPLOAD_AVATAR_FAIL,
             payload: error.response && error.response.data.error
@@ -180,7 +168,6 @@ export const memberGetAll = (sort) => async (dispatch) => {
         const {data} = await memberServices.index(sort)
         dispatch({type:MEMBER_ALL_SUCCESS, payload:data})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_ALL_FAIL, 
             payload:error.response && error.response.data.error
@@ -194,7 +181,6 @@ export const convertToPNG = (svg) => async(dispatch) => {
         const {data} = await memberServices.convertToPNG(svg)
         dispatch({type:CONVERT_TO_PNG_SUCCESS, payload:data.png})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:CONVERT_TO_PNG_FAIL,
             payload: error.response && error.response.data.error
@@ -208,10 +194,8 @@ export const convertToPDF = (svg) => async(dispatch) => {
     try {
         await memberServices.convertToPDF(svg)
         const {data} = await memberServices.generatePDF()
-        console.log(data);
         dispatch({type:CONVERT_TO_PDF_SUCCESS, payload:data.pdf})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:CONVERT_TO_PDF_FAIL,
             payload: error.response && error.response.data.error
@@ -225,7 +209,6 @@ export const userGenerateFamilyCSV = () => async(dispatch) => {
         const {data} = await memberServices.getCSVData()
         dispatch({type:MEMBER_GENERATE_CSV_SUCCESS, payload:data})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_GENERATE_CSV_FAIL,
             payload: error.response && error.response.data.error
@@ -239,7 +222,6 @@ export const getMembersBySearch = (name) => async(dispatch) => {
         const {data} = await memberServices.searchByName(name)
         dispatch({type:MEMBER_SEARCH_BY_NAME_SUCCESS, payload:data.members})
     } catch (error) {
-        console.log(error.response);
         dispatch({
             type:MEMBER_SEARCH_BY_NAME_FAIL,
             payload: error.response && error.response.data.error
