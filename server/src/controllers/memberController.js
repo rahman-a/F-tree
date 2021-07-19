@@ -43,7 +43,7 @@ export const createNewMember = async(req, res, next) => {
 
 export const uploadCSV = async(req, res, next) => {
     try {
-        if(req.file === undefined) throw new Error('من فضلك إرفع ملف الـ csv')
+        if(req.file === undefined) throw new Error('من فضلك إرفع ملف الـ Excel')
         if(path.extname(req.fileName) === '.xlsx'){
             const workBook = XLSX.readFile(path.resolve(__dirname, `../uploads/${req.fileName}`));
             workBook.SheetNames.forEach((sheet) => {
@@ -73,8 +73,9 @@ export const uploadCSV = async(req, res, next) => {
         }
         result.push(csvData)
         }).on('end', async () => {
+            const filteredResult = result.filter(data => data.firstName !== undefined && data.parentId !== undefined)
             await Member.deleteMany()
-            await Member.insertMany(result)
+            await Member.insertMany(filteredResult)
             fs.unlinkSync(path.resolve(__dirname, `../uploads/${req.fileName}`))
             fs.unlinkSync(path.resolve(__dirname, `../uploads/${req.fileName.split('.')[0]}.xlsx`))
             res.status(200).send({message:'تم رفع الملف بنجاح'})     
@@ -333,6 +334,7 @@ export const SvgToPng = async(req, res, next) => {
         const png = await convert(req.body.svg,{
             puppeteer:{args: ['--no-sandbox'] }
         });
+        res.set('Accept-Charset', 'utf-8');
         res.set('Content-Type', 'image/png');
         res.send({png});
     } catch (error) {

@@ -179,6 +179,7 @@ export const convertToPNG = (svg) => async(dispatch) => {
     dispatch({type:CONVERT_TO_PNG_REQUEST})
     try {
         const {data} = await memberServices.convertToPNG(svg)
+        console.log(data);
         dispatch({type:CONVERT_TO_PNG_SUCCESS, payload:data.png})
     } catch (error) {
         dispatch({

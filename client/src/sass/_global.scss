@@ -5,6 +5,10 @@ main {
     text-align: center;
     font-size: 5rem;
     margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 .footer {
     &__show {
@@ -21,16 +25,47 @@ main {
 }
 
 .pagination {
-    justify-content: center;
+   flex-wrap: wrap;
     align-items: center;
     li {
-        margin-left: 2rem;
-    }
+        padding: 0 0.5rem;
+        margin-top: 0.8rem;
+      }
 }
 button:disabled {
     background-color: rgb(202, 199, 199) !important;
     pointer-events: none !important;
 }
+
+.lds-dual-ring {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  }
+  .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 15rem;
+    height: 15rem;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid rgb(255 255 255 / 69%);
+    border-color: rgb(0 150 136 / 70%) transparent rgb(0 0 0 / 60%) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 // .tree {
 //     &__wrapper {
 //         background-image: url('../img/white_texture_2.jpg');

@@ -14,7 +14,8 @@ import {
 } from '../constants/memberConstant'
 import Template from '../components/Template'
 import {Button, Form,Alert} from 'react-bootstrap'
-import Tree from '../components/Tree'
+// import Tree from '../components/Tree'
+import TreeFix from '../components/TreeFix'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
 import { useHistory } from 'react-router'
@@ -24,13 +25,14 @@ const Home = () => {
     const [isGenerateOn, setIsGenerateOn] = useState(false)
     const [countId, setCountId] = useState(0)
     const [isProfile, setIsProfile] = useState(false)
+    const [isPoint, setIsPoint] = useState(false)
     const dispatch = useDispatch()
     const history = useHistory()
     const {user:{data}} = useSelector(state => state.login) 
     const {loading, error, message, isUploaded} = useSelector(state => state.csvReducer) 
     const {loading:loading_g, error:error_g, csvData} = useSelector(state => state.generateCSV)
     const {loading:loading_f, error:error_f, familyData} = useSelector(state => state.familyData)
-    const {pngData} = useSelector(state => state.PNGTree)
+    const {loading:loading_p, pngData} = useSelector(state => state.PNGTree)
     const {familyCSV} = useSelector(state => state.familyCSV)
     
     const uploadCSVHandler = (e) => {
@@ -96,7 +98,7 @@ const Home = () => {
         <Template>
             {/* Start Model for upload csv file */}
             <Modal
-            heading='رفع ملف الــ CSV المحتوى على بيانات أعضاء العائلة'
+            heading='رفع ملف الــ Excel المحتوى على بيانات أعضاء العائلة'
             show={isUploadOn}
             onHide={() => setIsUploadOn(false)}
             >
@@ -152,8 +154,8 @@ const Home = () => {
                 <Button variant='light' onClick={generateCSVFamilyHandler}>
                     جلب ملف البيانات
                 </Button>
-                <Button variant='warning' onClick={SVGTOPNGHandler}>
-                    تصدير الشجرة كـ PNG
+                <Button style={{width:'14rem', height:'3.5rem', position:'relative'}} variant='warning' onClick={SVGTOPNGHandler}>
+                   {loading_p ? <div className="lds-dual-ring"></div> : 'تصدير الشجرة كـ PNG'}
                 </Button>
                 <Button variant='danger' onClick={() => history.push('/new')}>
                     إضافة عضو جديد
@@ -165,6 +167,12 @@ const Home = () => {
                     style={{color:isProfile ? '#197802': '#7b8a8b', textShadow: isProfile && '0px 12px 18px #18bc9c'}}>
                     </i>
                 </Button>
+                <Button variant='info' onClick={() => setIsPoint(!isPoint)}> 
+                    وضع الإشارة 
+                    <i className="fas fa-hand-point-up"
+                    style={{color:isPoint? '#197802': '#7b8a8b', textShadow: isPoint && '0px 12px 18px #18bc9c'}}>
+                    </i>
+                </Button>
                 {/* <Button variant='danger' onClick={() => setSvgScale(svgScale - 0.1)} disabled = {svgScale <= 0}>
                 تصغير حجم الشجرة
                 </Button> */}
@@ -173,7 +181,7 @@ const Home = () => {
                 {/* <Tree familyData={familyData} isProfile={isProfile}/> */}
                {error_f && <Alert variant='danger'>{error_f}</Alert>}
                {loading_f ? <Loader/>
-               :familyData && familyData.length > 1 ? <Tree familyData={familyData} isProfile={isProfile}/>
+               :familyData && familyData.length > 1 ? <TreeFix familyData={familyData} isProfile={isProfile} isPoint={isPoint}/>
                :<div className="home__fallback">
                      ليس هناك بيانات لعرض شجرة العائلة 
                     <span> من فضلك ارفع ملف البيانات لجلب المعلومات اللازمة </span>

@@ -189,20 +189,23 @@ const MemberInfo = () => {
             </Modal.Header>
             <Modal.Body>
                {`${info.firstName} ${info.fullName ?info.fullName + ' ' : ''}`} 
-                سعيد غنيم مفرج بركه محمد غنيم المرواني الجهني
+                 غنيم مفرج بركه محمد غنيم المرواني الجهني
             </Modal.Body>
             </Modal>}
             {/* End Model for Full Name */}
-            <div className="main__title">بيانات العضو</div>
+            <div className="main__title">
+                بيانات العضو
+                {(user.data.isAdmin || user.data.isCoAdmin) &&<CopyToClipboard text={id}
+                    onCopy={() => setIsCopied(true)}>
+                    <div style={{marginTop:'-3rem'}}><Button style={{width:'fit-content', fontSize:'1.4rem'}} variant='light'>إضغط هنا لنسخ المعرف الخاص بالعضو</Button>
+                    <span style={{fontSize:'2rem',display:isCopied ? 'block' : 'none', color:'#81f781'}}>تم النسخ ✔</span></div>
+                </CopyToClipboard>}
+            </div>
             {loading ? <Loader/> 
             : error ? <Alert variant='danger'>{error}</Alert>
             :info && 
             <Container>
-                {(user.data.isAdmin || user.data.isCoAdmin) &&<CopyToClipboard text={id}
-                    onCopy={() => setIsCopied(true)}>
-                    <div style={{textAlign:'center'}}><Button style={{width:'fit-content', fontSize:'1.4rem'}} variant='light'>إضغط هنا لنسخ المعرف الخاص بالعضو</Button>
-                    <span style={{display:isCopied ? 'block' : 'none', color:'#81f781'}}>تم النسخ ✔</span></div>
-                </CopyToClipboard>}
+               
                 {loading_e ? <Loader/> 
                 :error_e ? <Popup danger passHandler={() => dispatch({type:MEMBER_EDIT_CLEAR})}><p>{error_e}</p></Popup>
                 :message_e && <Popup success passHandler={() => dispatch({type:MEMBER_EDIT_CLEAR})}><p>{message_e}</p></Popup>}

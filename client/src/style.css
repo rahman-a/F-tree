@@ -75,7 +75,12 @@ main {
 .main__title {
   text-align: center;
   font-size: 5rem;
-  margin-top: 2rem; }
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
 @media (max-width: 61.99em) {
   .footer__show {
@@ -88,10 +93,12 @@ main {
       display: block; } }
 
 .pagination {
-  justify-content: center;
+  flex-wrap:wrap;
   align-items: center; }
-  .pagination li {
-    margin-left: 2rem; }
+.pagination li {
+  padding: 0 0.5rem;
+  margin-top: 0.8rem;
+}
 
 button:disabled {
   background-color: #cac7c7 !important;
@@ -975,5 +982,35 @@ button:disabled {
   .tree__wrapper {
      overflow: unset;
      min-width: fit-content
+  }
+}
+
+.lds-dual-ring {
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid rgb(255 255 255 / 69%);
+  border-color: rgb(255 255 255 / 69%) transparent rgb(255 255 255 / 69%) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
