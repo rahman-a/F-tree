@@ -330,12 +330,13 @@ const MemberInfo = () => {
                                         <Form.Group controlId="exampleForm.ControlSelect2">
                                             <Form.Label>حالة الشخص</Form.Label>
                                             <Form.Control as="select" 
-                                            defaultValue={info.isAlive ? 'على قيد الحياة':'متوفى'}
+                                            defaultValue={info.isAlive === true ? 'على قيد الحياة' :info.isAlive === false ? 'متوفى':''}
                                             name='isAlive'
                                             onChange={({target}) => {
                                                 if(target.value === 'متوفى') setFormInfo({...formInfo,isAlive:false})
                                                 else setFormInfo({...formInfo,isAlive:true})
                                             }}>
+                                            <option value=''>لم يحدد</option>
                                             <option value='متوفى'>متوفي</option>
                                             <option value='على قيد الحياة'>على قيد الحياة</option>
                                             </Form.Control>

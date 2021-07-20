@@ -23,6 +23,9 @@ import {
     MEMBER_GENERATE_DATA_REQUEST,
     MEMBER_GENERATE_DATA_SUCCESS,
     MEMBER_GENERATE_DATA_FAIL,
+    MEMBER_GENERATE_FAMILY_CSV_REQUEST,
+    MEMBER_GENERATE_FAMILY_CSV_SUCCESS,
+    MEMBER_GENERATE_FAMILY_CSV_FAIL,
     MEMBER_INFO_REQUEST,
     MEMBER_INFO_SUCCESS,
     MEMBER_INFO_FAIL,
@@ -32,12 +35,9 @@ import {
     MEMBER_ALL_REQUEST,
     MEMBER_ALL_SUCCESS,
     MEMBER_ALL_FAIL,
-    CONVERT_TO_PNG_REQUEST,
-    CONVERT_TO_PNG_SUCCESS,
-    CONVERT_TO_PNG_FAIL,
-    CONVERT_TO_PDF_REQUEST,
-    CONVERT_TO_PDF_SUCCESS,
-    CONVERT_TO_PDF_FAIL,
+    EXPORT_SVG_REQUEST,
+    EXPORT_SVG_SUCCESS,
+    EXPORT_SVG_FAIL
 } from '../constants/memberConstant'
 
 import memberServices from '../services/membersServices'
@@ -122,13 +122,13 @@ export const userUploadCSV = (csv) => async(dispatch) => {
 }
 
 export const userGenerateCSV = (count) => async(dispatch) => {
-    dispatch({type:MEMBER_GENERATE_CSV_REQUEST})
+    dispatch({type:MEMBER_GENERATE_FAMILY_CSV_REQUEST})
     try {
         const {data} = await memberServices.generateCSV(count)
-        dispatch({type:MEMBER_GENERATE_CSV_SUCCESS, payload:data})
+        dispatch({type:MEMBER_GENERATE_FAMILY_CSV_SUCCESS, payload:data})
     } catch (error) {
         dispatch({
-            type:MEMBER_GENERATE_CSV_FAIL,
+            type:MEMBER_GENERATE_FAMILY_CSV_FAIL,
             payload: error.response && error.response.data.error
         })
     }
@@ -175,34 +175,19 @@ export const memberGetAll = (sort) => async (dispatch) => {
     }
 }
 
-export const convertToPNG = (svg) => async(dispatch) => {
-    dispatch({type:CONVERT_TO_PNG_REQUEST})
+export const exportSVG = (svgData) => async(dispatch) => {
+    dispatch({type:EXPORT_SVG_REQUEST})
     try {
-        const {data} = await memberServices.convertToPNG(svg)
-        console.log(data);
-        dispatch({type:CONVERT_TO_PNG_SUCCESS, payload:data.png})
+        const {data} = await memberServices.exportSVG(svgData)
+        dispatch({type:EXPORT_SVG_SUCCESS, payload:data.file})
     } catch (error) {
         dispatch({
-            type:CONVERT_TO_PNG_FAIL,
+            type:EXPORT_SVG_FAIL,
             payload: error.response && error.response.data.error
         })
     }
 }
 
-
-export const convertToPDF = (svg) => async(dispatch) => {
-    dispatch({type:CONVERT_TO_PDF_REQUEST})
-    try {
-        await memberServices.convertToPDF(svg)
-        const {data} = await memberServices.generatePDF()
-        dispatch({type:CONVERT_TO_PDF_SUCCESS, payload:data.pdf})
-    } catch (error) {
-        dispatch({
-            type:CONVERT_TO_PDF_FAIL,
-            payload: error.response && error.response.data.error
-        })
-    }
-}
 
 export const userGenerateFamilyCSV = () => async(dispatch) => {
     dispatch({type:MEMBER_GENERATE_CSV_REQUEST})

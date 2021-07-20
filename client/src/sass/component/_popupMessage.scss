@@ -5,7 +5,7 @@
     @include respond(tablet){
         min-width:35rem;
     }
-    position: absolute;
+    position: fixed;
     top:0;
     left:50%;
     transform: translateX(-50%);

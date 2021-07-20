@@ -37,13 +37,10 @@ import {
     MEMBER_ALL_REQUEST,
     MEMBER_ALL_SUCCESS,
     MEMBER_ALL_FAIL,
-    CONVERT_TO_PNG_REQUEST,
-    CONVERT_TO_PNG_SUCCESS,
-    CONVERT_TO_PNG_FAIL,
-    CONVERT_TO_PNG_CLEAR,
-    CONVERT_TO_PDF_REQUEST,
-    CONVERT_TO_PDF_SUCCESS,
-    CONVERT_TO_PDF_FAIL,
+    EXPORT_SVG_REQUEST,
+    EXPORT_SVG_SUCCESS,
+    EXPORT_SVG_FAIL,
+    EXPORT_SVG_CLEAR,
     MEMBER_GENERATE_FAMILY_CSV_REQUEST,
     MEMBER_GENERATE_FAMILY_CSV_SUCCESS,
     MEMBER_GENERATE_FAMILY_CSV_FAIL,
@@ -195,33 +192,21 @@ export const allMembersReducer = (state ={},  action) => {
 }
 
 
-export const convertToPNGReducer = (state = {}, action) => {
+export const exportSVGReducer = (state = {}, action) => {
     switch(action.type) {
-        case CONVERT_TO_PNG_REQUEST:
+        case EXPORT_SVG_REQUEST:
             return {loading:true, error:null}
-        case CONVERT_TO_PNG_SUCCESS:
-            return {loading:false, error:null, pngData:action.payload}
-        case CONVERT_TO_PNG_FAIL:
+        case EXPORT_SVG_SUCCESS:
+            return {loading:false, error:null, file:action.payload}
+        case EXPORT_SVG_FAIL:
             return {loading:false, error:action.payload}
-        case CONVERT_TO_PNG_CLEAR:
+        case EXPORT_SVG_CLEAR:
             return {error:null, pngData:null}
         default:
             return state
     }
 }
 
-export const convertToPDFReducer = (state = {}, action) => {
-    switch(action.type) {
-        case CONVERT_TO_PDF_REQUEST:
-            return {loading:true, error:null}
-        case CONVERT_TO_PDF_SUCCESS:
-            return {loading:false, error:null, pdfData:action.payload}
-        case CONVERT_TO_PDF_FAIL:
-            return {loading:false, error:action.payload}
-        default:
-            return state
-    }
-}
 
 export const generateFamilyCSVReducer = (state = {}, action) => {
     switch(action.type){

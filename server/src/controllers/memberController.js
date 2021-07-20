@@ -6,11 +6,8 @@ import {fileURLToPath} from 'url'
 import fs from 'fs'
 import csvParser from 'csv-parser'
 import ObjectId from 'bson-objectid'
-import objectToCSV from 'objects-to-csv'
 import sharp from 'sharp'
-// import pdf from 'html-pdf'
-import pkg from 'convert-svg-to-png'
-const {convert} = pkg
+import puppeteer from 'puppeteer' 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 
@@ -130,13 +127,11 @@ export const generateCSVTemplate = async(req, res, next) => {
             }
             list.push(data)
         }
-        const csv = new objectToCSV(list)
-        await csv.toDisk(path.resolve(__dirname, '../uploads/family-template.csv'))
-        const filePath = path.resolve(__dirname, '../uploads/family-template.csv')
-        const fileName = 'family_template'
-        res.set('content-type', 'text/csv')
-        res.attachment(fileName)
-        res.download(filePath)
+        const wb = XLSX.utils.book_new()
+        const ns = XLSX.utils.json_to_sheet(list)
+        XLSX.utils.book_append_sheet(wb, ns, 'family-template')
+        XLSX.writeFile(wb, path.resolve(__dirname, '../uploads/family-template.xlsx'))
+        res.send({message:'تم إنشاء الملف بنجاح'})
     } catch (error) {
         next(error)
     }  
@@ -311,6 +306,7 @@ export const getMemberAvatar = async (req, res, next) => {
 export const editMemberById = async (req, res, next) => {
     const {id} = req.body
     delete req.body.id
+    console.log('Edit Member');
     try {
        const member = await Member.findById(id)
        if(!member) throw new Error('هذا العضو غير موجود')
@@ -325,47 +321,49 @@ export const editMemberById = async (req, res, next) => {
         next(error)
     }
 }
-export const SvgToPng = async(req, res, next) => {
+
+export const exportSVG = async(req, res, next) => {
+    const {svg, type} = req.body
     try {
-        if(!req.body.svg){
+        if(!svg){
             res.status(400)
             throw new Error('من فضلك ارفع البيانات حتى يتم انشاء الصورة')
         }
-        const png = await convert(req.body.svg,{
-            puppeteer:{args: ['--no-sandbox'] }
-        });
-        res.set('Accept-Charset', 'utf-8');
-        res.set('Content-Type', 'image/png');
-        res.send({png});
+        const temp = `<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Family Tree</title>
+        </head>
+        <body>${svg}</body>
+        </html>`;
+        const browser = await puppeteer.launch({
+            defaultViewport: null,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        })
+        const page = await browser.newPage()
+        await page.setContent(temp)
+        if(type === 'pdf') {
+            fs.writeFileSync(path.resolve(__dirname, '../uploads/tree.pdf'), await page.pdf({width:'4000', height:'2200'}))
+            await browser.close()
+            res.send({file:"tree.pdf"})
+        }
+        else {
+            fs.writeFileSync(path.resolve(__dirname, '../uploads/tree.png'), await page.screenshot({fullPage:true}))
+            await browser.close()
+            res.send({file:"tree.png"})
+        }
+       
     } catch (error) {
         next(error)
     }
 }
 
-// export const SvgToPdf = async(req, res, next) => {
-//     console.log(path.resolve(__dirname, '../uploads'))
-//     try { 
-//         await pdf.create(req.body.svg, {})
-//         .toFile(path.resolve(__dirname, `../uploads/result.pdf`), (err) =>{
-//             if(err) throw new Error(err)
-//         });
-//         res.status(201).send();
-//     } catch (error) {
-//         next(error)
-//     }
-// }
-
-// export const getPDFFile = async(req, res, next) => {
-//     try {
-//         res.set('content-type', 'application/pdf')
-//         res.attachment('result.pdf')
-//         res.download(path.resolve(__dirname, '../uploads/result.pdf'))
-//     } catch (error) {
-//         next(error)
-//     }
-// }
 
 export const exportDataAsCSV = async(req, res, next) => {
+    console.log('generate Family csv');
     try {
         const members = await Member.find({})
         const list = members.map(member => {
@@ -390,13 +388,11 @@ export const exportDataAsCSV = async(req, res, next) => {
                 isAlive:member.isAlive === true ? 'TRUE': member.isAlive === false ? 'FALSE' : ''
             }
         })
-        const csv = new objectToCSV(list)
-        await csv.toDisk(path.resolve(__dirname, '../uploads/family-data.csv'))
-        const filePath = path.resolve(__dirname, '../uploads/family-data.csv')
-        const fileName = 'family_data'
-        res.set('content-type', 'text/csv')
-        res.attachment(fileName)
-        res.download(filePath)
+        const wb = XLSX.utils.book_new()
+        const ns = XLSX.utils.json_to_sheet(list)
+        XLSX.utils.book_append_sheet(wb, ns, 'family-data')
+        XLSX.writeFile(wb, path.resolve(__dirname, '../uploads/family-data.xlsx'))
+        res.send({message:'تم إنشاء الملف بنجاح'})
     } catch (error) {
         next(error)
     }  

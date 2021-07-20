@@ -46,4 +46,18 @@
             margin-right: 1rem;
         }
     }
+    &__export {
+        position: absolute;
+        top: 3.5rem;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        background-color: aliceblue;
+        padding: 1rem;
+        button {
+            margin: 0;
+        }
+    }
 }

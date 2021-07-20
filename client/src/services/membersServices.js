@@ -25,11 +25,8 @@ const services = {
     index(sort){
         return api().get(`members/all${sort ? sort : '' }`)
     },
-    convertToPNG(svg) {
-        return api().post('members/convertSvgToPng', {svg})
-    },
-    convertToPDF(svg) {
-        return api().post('members/convertSvgToPdf', {svg})
+    exportSVG(data) {
+        return api().post('members/exportSVG', data)
     },
     generatePDF() {
         return api().get('members/getPdfFile')

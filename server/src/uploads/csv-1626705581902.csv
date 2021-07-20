@@ -1,7 +1,0 @@
-﻿_id,firstName,parentName,parentId,fullName,spouseNames,childrenNames,maritalStatus,gender,job,age,sector,birthDate,phone,address,isAlive
-60dc5fb03665f45560dcd498,المتولى,,null,,,,,ذكر,,,,,,,FALSE
-60dc5fb03665f45560dcd499,الشهاوى ,المتولى,60dc5fb03665f45560dcd498,,"60dc5fb03665f45560dcd4a7, جنة",,,ذكر,,,,,,,
-60dc5fb03665f45560dcd49a,السيد,المتولى,60dc5fb03665f45560dcd498,,,,,ذكر,,,,,,,
-60dc5fb03665f45560dcd49c,أحمد,السيد,60dc5fb03665f45560dcd49a,المتولى ابراهيم حسين محمود غنيم السيد عبد الرحمن,"60dc5fb03665f45560dcd4a9,60dc5fb03665f45560dcd4b0, ريهام","60dc5fb03665f45560dcd4a5,60dc5fb03665f45560dcd4a6,60dc5fb03665f45560dcd4a7",متزوج,ذكر,مبرمج مواقع انترنت,31,شربين,2/6/90,1117490786,راس الخليج - مركز شربين - محافظة الدقهلية,TRUE
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,

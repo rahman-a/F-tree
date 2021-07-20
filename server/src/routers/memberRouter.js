@@ -13,7 +13,7 @@ const router  = express.Router()
     createNewMember,
     searchByName,
     removeSpouseById,
-    SvgToPng,
+    exportSVG,
     exportDataAsCSV
  } from '../controllers/memberController.js'
 import {userAuth, isCoAdmin} from '../middleware/authenticate.js'
@@ -28,7 +28,7 @@ router.get('/search', userAuth, isCoAdmin, searchByName)
 router.get('/:id', userAuth,getMemberInfoById)
 router.get('/avatar/:id', userAuth,getMemberAvatar)
 router.post('/photo', userAuth, isCoAdmin,avatarUpload.single('avatar'),memberAvatarUpload)
-router.post('/convertSvgTOPng', userAuth, isCoAdmin, SvgToPng)
+router.post('/exportSVG', userAuth, isCoAdmin, exportSVG)
 router.patch('/edit', userAuth, isCoAdmin, editMemberById)
 router.patch('/relatives', userAuth, isCoAdmin, addSpouseAndChildren)
 router.patch('/del-relatives', userAuth, isCoAdmin, removeSpouseById)

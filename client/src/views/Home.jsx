@@ -3,19 +3,18 @@ import { useDispatch, useSelector} from 'react-redux'
 import {
     userUploadCSV, 
     userGenerateCSV, 
-    userGenerateData, 
-    convertToPNG, 
-    userGenerateFamilyCSV
+    userGenerateData,  
+    userGenerateFamilyCSV,
+    exportSVG
 } from '../actions/memberActions'
 import {
     MEMBER_GENERATE_CSV_CLEAR,
-    CONVERT_TO_PNG_CLEAR,
+    EXPORT_SVG_CLEAR,
     MEMBER_GENERATE_FAMILY_CSV_CLEAR
 } from '../constants/memberConstant'
 import Template from '../components/Template'
 import {Button, Form,Alert} from 'react-bootstrap'
-// import Tree from '../components/Tree'
-import TreeFix from '../components/TreeFix'
+import Tree from '../components/Tree'
 import Modal from '../components/Modal'
 import Loader from '../components/Loader'
 import { useHistory } from 'react-router'
@@ -23,6 +22,7 @@ import { useHistory } from 'react-router'
 const Home = () => {
     const [isUploadOn, setIsUploadOn] = useState(false)
     const [isGenerateOn, setIsGenerateOn] = useState(false)
+    const [isExport, setIsExport] = useState(false)
     const [countId, setCountId] = useState(0)
     const [isProfile, setIsProfile] = useState(false)
     const [isPoint, setIsPoint] = useState(false)
@@ -32,7 +32,7 @@ const Home = () => {
     const {loading, error, message, isUploaded} = useSelector(state => state.csvReducer) 
     const {loading:loading_g, error:error_g, csvData} = useSelector(state => state.generateCSV)
     const {loading:loading_f, error:error_f, familyData} = useSelector(state => state.familyData)
-    const {loading:loading_p, pngData} = useSelector(state => state.PNGTree)
+    const {loading:loading_p, file} = useSelector(state => state.exportSVG)
     const {familyCSV} = useSelector(state => state.familyCSV)
     
     const uploadCSVHandler = (e) => {
@@ -49,51 +49,37 @@ const Home = () => {
         dispatch(userGenerateFamilyCSV())
     }
 
-    const getAvatar  = (buffer) => {
-        const arrayBufferView = new Uint8Array(buffer)
-        const blob = new Blob([ arrayBufferView ], { type: 'image/png' })
-        const urlCreator = window.URL || window.webkitURL
-        const imageUrl = urlCreator.createObjectURL(blob)
-        return imageUrl
-      }
-
-    const SVGTOPNGHandler = async  _ => {
+    const exportSVGHandler = async type => {
         if(document.querySelector('svg')){
             const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
-            dispatch(convertToPNG(svgString))
+            dispatch(exportSVG({svg:svgString, type}))
         }
        
     }
-    // const SVGTOPDFHandler = async  _ => {
-    //     const svgString = new XMLSerializer().serializeToString(document.querySelector('svg'))
-    //     dispatch(convertToPDF(svgString))
-       
-    // }
     useEffect(() => {
         if(csvData) {
             const hiddenElement = document.createElement('a');
-                  hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
-                  hiddenElement.download = 'family_template.csv';
+                  hiddenElement.href = 'http://localhost:5000/uploads/family-data.xlsx';
+                  hiddenElement.download = 'family_data.xlsx';
                   hiddenElement.click();
             dispatch({type:MEMBER_GENERATE_CSV_CLEAR})
         }
-        if(pngData){
-            const source = getAvatar(pngData.data)
+        if(file){
             const hiddenElement = document.createElement('a');
-                  hiddenElement.href = source;
+                  hiddenElement.href = `http://localhost:5000/uploads/${file}`;
                   hiddenElement.download = 'family-tree.png'
                   hiddenElement.click();
-                  dispatch({type:CONVERT_TO_PNG_CLEAR})
+                  dispatch({type:EXPORT_SVG_CLEAR})
         };
         if(familyCSV){
             const hiddenElement = document.createElement('a');
-            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(familyCSV);
-            hiddenElement.download = 'family_data.csv';
+            hiddenElement.href = 'http://localhost:5000/uploads/family-template.xlsx';
+            hiddenElement.download = 'family_template.xlsx';
             hiddenElement.click()
             dispatch({type:MEMBER_GENERATE_FAMILY_CSV_CLEAR})
         };
         if(!familyData) dispatch(userGenerateData())
-    },[isUploaded, csvData, dispatch, pngData, history, familyCSV, familyData])
+    },[isUploaded, csvData, dispatch, file, history, familyCSV, familyData])
     return (
         <Template>
             {/* Start Model for upload csv file */}
@@ -154,8 +140,12 @@ const Home = () => {
                 <Button variant='light' onClick={generateCSVFamilyHandler}>
                     جلب ملف البيانات
                 </Button>
-                <Button style={{width:'14rem', height:'3.5rem', position:'relative'}} variant='warning' onClick={SVGTOPNGHandler}>
-                   {loading_p ? <div className="lds-dual-ring"></div> : 'تصدير الشجرة كـ PNG'}
+                <Button style={{width:'14rem', height:'3.5rem', position:'relative'}} variant='warning' onClick={() => setIsExport(!isExport)}>
+                   {loading_p ? <div className="lds-dual-ring"></div> : 'تصدير الشجرة'}
+                   <div className='home__export' style={{display:isExport ? 'flex': 'none'}}>
+                       <Button variant='info' onClick={() => exportSVGHandler('png')}>PNG</Button>
+                       <Button variant='info' onClick={() => exportSVGHandler('pdf')}>PDF</Button>
+                   </div>
                 </Button>
                 <Button variant='danger' onClick={() => history.push('/new')}>
                     إضافة عضو جديد
@@ -173,15 +163,12 @@ const Home = () => {
                     style={{color:isPoint? '#197802': '#7b8a8b', textShadow: isPoint && '0px 12px 18px #18bc9c'}}>
                     </i>
                 </Button>
-                {/* <Button variant='danger' onClick={() => setSvgScale(svgScale - 0.1)} disabled = {svgScale <= 0}>
-                تصغير حجم الشجرة
-                </Button> */}
             </div>
             <div className="home__main">
                 {/* <Tree familyData={familyData} isProfile={isProfile}/> */}
                {error_f && <Alert variant='danger'>{error_f}</Alert>}
                {loading_f ? <Loader/>
-               :familyData && familyData.length > 1 ? <TreeFix familyData={familyData} isProfile={isProfile} isPoint={isPoint}/>
+               :familyData && familyData.length > 1 ? <Tree familyData={familyData} isProfile={isProfile} isPoint={isPoint}/>
                :<div className="home__fallback">
                      ليس هناك بيانات لعرض شجرة العائلة 
                     <span> من فضلك ارفع ملف البيانات لجلب المعلومات اللازمة </span>
