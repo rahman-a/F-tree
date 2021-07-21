@@ -67,7 +67,6 @@ const Home = () => {
         if(file){
             const hiddenElement = document.createElement('a');
                   hiddenElement.href = `/uploads/${file}`;
-                  hiddenElement.download = file
                   hiddenElement.click();
                   dispatch({type:EXPORT_SVG_CLEAR})
         };

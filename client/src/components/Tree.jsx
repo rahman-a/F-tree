@@ -1,6 +1,7 @@
 import {useEffect, useState, useCallback ,useRef, useMemo} from 'react'
 import * as d3 from 'd3'
 import { useHistory} from 'react-router'
+import Popup from './PopupMessage'
 
 const radialPoint = (x, y) => {
     return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
@@ -23,9 +24,11 @@ const Tree = ({familyData,isProfile, isPoint}) => {
     const wrapperRef = useRef(null)
     const history = useHistory()
     const [triggerTree, setTriggerTree] = useState(false)
+    const [treeError, setTreeError] = useState('')
     
     const familyTree = useCallback(() => {
-            if(wrapperRef.current){
+        if(wrapperRef.current){
+            try {
                 wrapperRef.current.innerHTML = '';
             const margin = {top: 140, right: 0, bottom: 20, left: 0}
             wrapperRef.current.width = wrapperRef.current.getBoundingClientRect().width
@@ -200,10 +203,11 @@ const Tree = ({familyData,isProfile, isPoint}) => {
                 .duration(1500)
                 .delay(d => d.depth * 600)
                 .attr('opacity', 1)
-            
-           
+            } catch (error) {
+                setTreeError(error.message)
+                console.log(error.message.split(':'));
             }
-        },
+        }},
         [familyData, isPoint, isProfile, history],
     )
     useMemo(familyTree,[familyTree, triggerTree])  
@@ -212,7 +216,12 @@ const Tree = ({familyData,isProfile, isPoint}) => {
     setTriggerTree(true)
   },[])
    
-  return <div className="tree__wrapper" ref={wrapperRef}></div>
+  return (
+  <>
+    <div className="tree__wrapper" ref={wrapperRef}></div>
+    {treeError && <Popup danger><p>{treeError}</p></Popup>}
+  </>
+  )
     
 }
 
