@@ -59,21 +59,21 @@ const Home = () => {
     useEffect(() => {
         if(csvData) {
             const hiddenElement = document.createElement('a');
-                  hiddenElement.href = 'http://localhost:5000/uploads/family-data.xlsx';
+                  hiddenElement.href = '/uploads/family-data.xlsx';
                   hiddenElement.download = 'family_data.xlsx';
                   hiddenElement.click();
             dispatch({type:MEMBER_GENERATE_CSV_CLEAR})
         }
         if(file){
             const hiddenElement = document.createElement('a');
-                  hiddenElement.href = `http://localhost:5000/uploads/${file}`;
+                  hiddenElement.href = `/uploads/${file}`;
                   hiddenElement.download = 'family-tree.png'
                   hiddenElement.click();
                   dispatch({type:EXPORT_SVG_CLEAR})
         };
         if(familyCSV){
             const hiddenElement = document.createElement('a');
-            hiddenElement.href = 'http://localhost:5000/uploads/family-template.xlsx';
+            hiddenElement.href = '/uploads/family-template.xlsx';
             hiddenElement.download = 'family_template.xlsx';
             hiddenElement.click()
             dispatch({type:MEMBER_GENERATE_FAMILY_CSV_CLEAR})
